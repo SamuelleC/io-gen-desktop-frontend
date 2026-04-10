@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarms - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .search-input::placeholder {
+            color: #A1A1AA;
+        }
+        .settings-table-body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .settings-table-body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph-gauge text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-chart-bar text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-check-circle text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);">
+                            <i class="ph ph-bell-simple-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Alarms</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                                <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                                <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                            </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="hidden absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4 border-b border-zinc-100">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                                <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-200">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div id="alarms-tabs" class="flex space-x-10 w-full mb-6" style="border-bottom: 1px solid #E4E4E7;">
+                <a href="/pages/alarms-page.html" class="alarms-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent hover:text-gray-700">Notifications</a>
+                <a href="/pages/alarm-settings-page.html" class="alarms-tab active text-sm font-medium text-gray-900 border-b-2 border-gray-900 pb-2">Settings</a>
+            </div>
+
+            <!-- Alarm Settings Table Container -->
+            <div class="bg-white rounded-xl overflow-hidden" style="max-height: 796px;">
+                <!-- Filter Buttons and Search -->
+                <div class="flex justify-between items-center px-6 py-3">
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <button id="energy-filter-btn" class="energy-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                                <span id="energy-filter-text">Energy</span>
+                                <i class="ph-caret-down text-zinc-700"></i>
+                            </button>
+                            <div id="energy-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[160px]">
+                                <div class="p-2">
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="all">All Energy</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Electricity">Electricity</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Gas">Gas</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Water">Water</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color: #A1A1AA;"></i>
+                            <input type="text" placeholder="Search" class="search-input pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200" style="background-color: #F5F5F4; color: #3F3F46; width: 200px;">
+                        </div>
+                        <button id="new-alarm-btn" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800">
+                            <i class="ph ph-plus"></i>
+                            <span>New alarm</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Header -->
+                <div class="grid grid-cols-12 gap-4 px-6 py-4 text-sm font-medium text-zinc-500" style="background-color: #f0f0ef;">
+                    <div class="col-span-4 flex items-center space-x-1">
+                        <span>Name</span>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Meter</span>
+                        <i class="ph ph-caret-up-down" style="color: #71717A; width: 16px; height: 16px; font-size: 16px;"></i>
+                    </div>
+                    <div class="col-span-3 flex items-center space-x-1">
+                        <span>Alarm type</span>
+                        <i class="ph ph-caret-up-down" style="color: #71717A; width: 16px; height: 16px; font-size: 16px;"></i>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Start date</span>
+                        <i class="ph ph-caret-up-down" style="color: #71717A; width: 16px; height: 16px; font-size: 16px;"></i>
+                    </div>
+                    <div class="col-span-1">
+                    </div>
+                </div>
+
+                <!-- Table Rows -->
+                <div id="settings-table-body" class="settings-table-body overflow-y-auto" style="max-height: 620px;">
+                    <!-- Rows will be rendered dynamically -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between px-6 py-4 border-t border-zinc-100">
+                    <div class="text-sm text-zinc-500">Showing 1-4 of 4</div>
+                    <div class="flex items-center space-x-2">
+                        <button class="w-8 h-8 flex items-center justify-center bg-white text-zinc-400">
+                            <i class="ph ph-caret-left"></i>
+                        </button>
+                        <span class="text-sm text-zinc-700">Page 1</span>
+                        <button class="w-8 h-8 flex items-center justify-center bg-white text-zinc-700">
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Alarm Panel Overlay -->
+    <div id="create-alarm-overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40"></div>
+    
+    <!-- Create Alarm Side Panel -->
+    <div id="create-alarm-panel" class="fixed top-0 right-0 h-full bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" style="width: 512px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: #E4E4E7;">
+            <h2 class="text-base font-medium text-zinc-900">Create alarm</h2>
+            <button id="create-alarm-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                <i data-lucide="x" class="w-5 h-5 text-zinc-700"></i>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="flex-1 px-6 py-4 overflow-y-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <!-- Name -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-1">Name</label>
+                <p class="text-xs text-zinc-500 mb-2">Add a short description to remember this rule.</p>
+                <input type="text" id="create-alarm-name" class="w-full px-4 py-2.5 text-sm border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-200" placeholder="Electricity goes above last year">
+            </div>
+            
+            <!-- Alarm start date -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-1">Alarm start date</label>
+                <p class="text-xs text-zinc-500 mb-2">Choose when your alarm will start.</p>
+                <div class="relative">
+                    <i class="ph ph-calendar absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                    <input type="text" id="create-alarm-date" class="w-full pl-10 pr-4 py-2.5 text-sm border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-200" placeholder="29/01/2026">
+                </div>
+            </div>
+            
+            <!-- Meter -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-1">Meter</label>
+                <p class="text-xs text-zinc-500 mb-2">Choose which measure to use for readings.</p>
+                <div class="relative">
+                    <select id="create-alarm-meter" class="w-full px-4 py-2.5 text-sm border border-zinc-200 rounded-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 bg-white text-zinc-500">
+                        <option value="">Select a meter</option>
+                        <option value="main-building">Main building</option>
+                        <option value="secondary">Secondary meter</option>
+                    </select>
+                    <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"></i>
+                </div>
+            </div>
+            
+            <!-- Alarm type -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-1">Alarm type</label>
+                <p class="text-xs text-zinc-500 mb-2">Choose what type of alarm to create.</p>
+                <div class="space-y-3">
+                    <label class="alarm-type-option flex items-start p-4 border-2 border-zinc-900 rounded-xl cursor-pointer">
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-zinc-900">Comparison – Last year</div>
+                            <div class="text-xs text-zinc-500">Compare today's consumption with the same day last year.</div>
+                        </div>
+                        <div class="w-5 h-5 rounded-full border-2 border-zinc-900 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-zinc-900"></div>
+                        </div>
+                        <input type="radio" name="alarm-type" value="comparison-last-year" class="hidden" checked>
+                    </label>
+                    <label class="alarm-type-option flex items-start p-4 border border-zinc-200 rounded-xl cursor-pointer hover:border-zinc-300">
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-zinc-900">Comparison – Last week</div>
+                            <div class="text-xs text-zinc-500">Compare today's consumption with the same day last week.</div>
+                        </div>
+                        <div class="w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        </div>
+                        <input type="radio" name="alarm-type" value="comparison-last-week" class="hidden">
+                    </label>
+                    <label class="alarm-type-option flex items-start p-4 border border-zinc-200 rounded-xl cursor-pointer hover:border-zinc-300">
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-zinc-900">Base load</div>
+                            <div class="text-xs text-zinc-500">Trigger an alarm when a reading is above or below a base load. Good for monitoring closed hours.</div>
+                        </div>
+                        <div class="w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        </div>
+                        <input type="radio" name="alarm-type" value="base-load" class="hidden">
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Alarm threshold -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-1">Alarm threshold</label>
+                <p class="text-xs text-zinc-500 mb-2">Trigger an alarm when a reading is</p>
+                <div class="flex items-center space-x-3">
+                    <div class="relative flex-1">
+                        <select id="create-alarm-threshold-type" class="w-full px-4 py-2.5 text-sm border border-zinc-200 rounded-xl appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 bg-white text-zinc-700">
+                            <option value="above">Above</option>
+                            <option value="below">Below</option>
+                        </select>
+                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"></i>
+                    </div>
+                    <input type="number" id="create-alarm-threshold-value" class="w-24 px-4 py-2.5 text-sm border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-200 text-center" value="10">
+                    <span class="text-sm text-zinc-500">%</span>
+                </div>
+            </div>
+            
+            <!-- Preview -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-zinc-900 mb-3">Preview</label>
+                <div class="relative h-24 border border-zinc-200 rounded-xl p-4">
+                    <!-- Y-axis -->
+                    <span class="absolute left-2 top-2 text-xs text-zinc-400">120</span>
+                    <!-- Preview chart line -->
+                    <svg class="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
+                        <path d="M0,40 Q20,35 40,38 T80,30 T120,35 T160,25 T200,30" fill="none" stroke="#E4E4E7" stroke-width="2" stroke-dasharray="4,4"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t border-zinc-200 flex items-center justify-end space-x-3">
+            <button id="create-alarm-cancel-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white hover:bg-zinc-50">Cancel</button>
+            <button id="create-alarm-submit-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800">Create alarm</button>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal Overlay -->
+    <div id="delete-modal-overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40 flex items-center justify-center">
+        <!-- Delete Confirmation Modal -->
+        <div id="delete-modal" class="bg-white rounded-xl shadow-xl z-50 p-6" style="width: 448px; height: 250px;">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-zinc-900">Delete this alarm?</h3>
+                <button id="delete-modal-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                    <i data-lucide="x" class="w-5 h-5 text-zinc-500"></i>
+                </button>
+            </div>
+            <p class="text-sm text-zinc-500 mb-8">You'll no longer receive notifications for this condition. You can always create a new alarm later if you need to monitor this again.</p>
+            <div class="flex items-center justify-end space-x-3">
+                <button id="delete-modal-cancel-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white hover:bg-zinc-50">Cancel</button>
+                <button id="delete-modal-confirm-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alarm Settings Data
+        const alarmSettingsData = [
+            {
+                id: '1',
+                name: 'Electricity goes above last year',
+                description: 'Consumption is more than 15% above last year.',
+                meter: 'Main building',
+                alarmType: 'Comparison – Last year',
+                startDate: '31/08/2025',
+                energy: 'Electricity'
+            },
+            {
+                id: '2',
+                name: 'Everything off at weekends',
+                description: 'Consumption is above 4.2 kWh at weekends.',
+                meter: 'Main building',
+                alarmType: 'Base load',
+                startDate: '30/07/2025',
+                energy: 'Gas'
+            },
+            {
+                id: '3',
+                name: 'Electricity goes above last year',
+                description: 'Consumption is more than 15% above last week.',
+                meter: 'Main building',
+                alarmType: 'Comparison – Last week',
+                startDate: '29/06/2025',
+                energy: 'Electricity'
+            },
+            {
+                id: '4',
+                name: 'Everything off at weekends',
+                description: 'Consumption is above 4.2 kWh at weekends.',
+                meter: 'Main building',
+                alarmType: 'Base load',
+                startDate: '28/05/2025',
+                energy: 'Water'
+            }
+        ];
+
+        // Energy type configurations
+        const energyConfig = {
+            'Electricity': { icon: 'plug', color: '#FFFFFF', backgroundColor: '#8574E0' },
+            'Gas': { icon: 'flame', color: '#FFFFFF', backgroundColor: '#EF743E' },
+            'Water': { icon: 'waves', color: '#FFFFFF', backgroundColor: '#0EA5E9' },
+            'Solar': { icon: 'sun', color: '#FFFFFF', backgroundColor: '#DDAC15' }
+        };
+
+        // Current alarm to delete
+        let currentAlarmToDelete = null;
+
+        // Create a single alarm settings row
+        function createAlarmSettingsRow(data, isLast = false) {
+            const energy = energyConfig[data.energy] || energyConfig['Electricity'];
+            const borderClass = isLast ? '' : 'border-b border-zinc-100';
+
+            return `
+                <div class="alarm-settings-row grid grid-cols-12 gap-4 px-6 ${borderClass} items-center hover:bg-zinc-50" style="min-height: 62px;" data-alarm-id="${data.id}">
+                    <div class="col-span-4 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: ${energy.backgroundColor};">
+                            <i data-lucide="${energy.icon}" class="w-5 h-5" style="color: ${energy.color};"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-zinc-900">${data.name}</div>
+                            <div class="text-xs text-zinc-500">${data.description}</div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 text-sm text-zinc-700">${data.meter}</div>
+                    <div class="col-span-3 text-sm text-zinc-700">${data.alarmType}</div>
+                    <div class="col-span-2 text-sm text-zinc-700">${data.startDate}</div>
+                    <div class="col-span-1 flex items-center justify-end space-x-2">
+                        <button class="edit-btn w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100" data-alarm-id="${data.id}">
+                            <i class="ph ph-pencil-simple text-xl" style="color: #52525B;"></i>
+                           
+                        </button>
+                        <button class="delete-btn w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100" data-alarm-id="${data.id}">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-zinc-500"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render all alarm settings rows
+        function renderAlarmSettingsRows() {
+            const tableBody = document.getElementById('settings-table-body');
+            tableBody.innerHTML = alarmSettingsData.map((alarm, index) => 
+                createAlarmSettingsRow(alarm, index === alarmSettingsData.length - 1)
+            ).join('');
+            lucide.createIcons();
+            attachDeleteHandlers();
+        }
+
+        // Attach delete button handlers
+        function attachDeleteHandlers() {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const alarmId = btn.dataset.alarmId;
+                    currentAlarmToDelete = alarmId;
+                    openDeleteModal();
+                });
+            });
+        }
+
+        // Delete Modal functionality
+        const deleteModalOverlay = document.getElementById('delete-modal-overlay');
+        const deleteModalCloseBtn = document.getElementById('delete-modal-close-btn');
+        const deleteModalCancelBtn = document.getElementById('delete-modal-cancel-btn');
+        const deleteModalConfirmBtn = document.getElementById('delete-modal-confirm-btn');
+
+        function openDeleteModal() {
+            deleteModalOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            deleteModalOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+            currentAlarmToDelete = null;
+        }
+
+        function deleteAlarm() {
+            if (currentAlarmToDelete) {
+                const index = alarmSettingsData.findIndex(a => a.id === currentAlarmToDelete);
+                if (index > -1) {
+                    alarmSettingsData.splice(index, 1);
+                    renderAlarmSettingsRows();
+                }
+            }
+            closeDeleteModal();
+        }
+
+        // Close modal events
+        deleteModalCloseBtn.addEventListener('click', closeDeleteModal);
+        deleteModalCancelBtn.addEventListener('click', closeDeleteModal);
+        deleteModalConfirmBtn.addEventListener('click', deleteAlarm);
+        deleteModalOverlay.addEventListener('click', (e) => {
+            if (e.target === deleteModalOverlay) {
+                closeDeleteModal();
+            }
+        });
+
+        // Initial render
+        renderAlarmSettingsRows();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Company dropdown functionality
+        const companySelector = document.getElementById('company-selector');
+        const companyDropdown = document.getElementById('company-dropdown');
+        
+        companySelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            companyDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                companyDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Site item selection
+        const siteItems = document.querySelectorAll('.site-item');
+        siteItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Update checkmark visuals
+                siteItems.forEach(s => {
+                    const checkbox = s.querySelector('.site-checkbox');
+                    checkbox.classList.remove('active');
+                    checkbox.style.borderColor = '#D4D4D8';
+                    checkbox.style.backgroundColor = 'transparent';
+                    checkbox.innerHTML = '';
+                });
+                
+                const checkbox = item.querySelector('.site-checkbox');
+                checkbox.classList.add('active');
+                checkbox.style.borderColor = '#18181B';
+                checkbox.style.backgroundColor = '#18181B';
+                
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'ph ph-check text-white text-xs';
+                checkbox.appendChild(checkIcon);
+                
+                // Close dropdown
+                companyDropdown.classList.add('hidden');
+            });
+        });
+
+        // Energy filter dropdown
+        const energyFilterBtn = document.getElementById('energy-filter-btn');
+        const energyDropdown = document.getElementById('energy-dropdown');
+        const energyFilterText = document.getElementById('energy-filter-text');
+
+        energyFilterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            energyDropdown.classList.toggle('hidden');
+        });
+
+        // Energy option selection
+        document.querySelectorAll('.energy-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const energy = option.dataset.energy;
+
+                // Update button text and style
+                if (energy === 'all') {
+                    energyFilterText.textContent = 'Energy';
+                    energyFilterBtn.classList.remove('bg-zinc-900', 'text-white');
+                    energyFilterBtn.classList.add('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                } else {
+                    energyFilterText.textContent = energy;
+                    energyFilterBtn.classList.remove('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                    energyFilterBtn.classList.add('bg-zinc-900', 'text-white');
+                }
+
+                energyDropdown.classList.add('hidden');
+            });
+        });
+
+        // Close energy dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!energyDropdown.contains(e.target) && !energyFilterBtn.contains(e.target)) {
+                energyDropdown.classList.add('hidden');
+            }
+        });
+
+        // Create Alarm Panel functionality
+        const createAlarmPanel = document.getElementById('create-alarm-panel');
+        const createAlarmOverlay = document.getElementById('create-alarm-overlay');
+        const createAlarmCloseBtn = document.getElementById('create-alarm-close-btn');
+        const createAlarmCancelBtn = document.getElementById('create-alarm-cancel-btn');
+        const createAlarmSubmitBtn = document.getElementById('create-alarm-submit-btn');
+        const newAlarmBtn = document.getElementById('new-alarm-btn');
+
+        function openCreateAlarmPanel() {
+            createAlarmPanel.classList.remove('translate-x-full');
+            createAlarmOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeCreateAlarmPanel() {
+            createAlarmPanel.classList.add('translate-x-full');
+            setTimeout(() => {
+                createAlarmOverlay.classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        // Open panel when New alarm button is clicked
+        newAlarmBtn.addEventListener('click', openCreateAlarmPanel);
+
+        // Close panel events
+        createAlarmCloseBtn.addEventListener('click', closeCreateAlarmPanel);
+        createAlarmCancelBtn.addEventListener('click', closeCreateAlarmPanel);
+        createAlarmOverlay.addEventListener('click', closeCreateAlarmPanel);
+
+        // Alarm type radio selection
+        document.querySelectorAll('.alarm-type-option').forEach(option => {
+            option.addEventListener('click', () => {
+                // Reset all options
+                document.querySelectorAll('.alarm-type-option').forEach(opt => {
+                    opt.classList.remove('border-2', 'border-zinc-900');
+                    opt.classList.add('border', 'border-zinc-200');
+                    const radio = opt.querySelector('.w-5.h-5');
+                    radio.classList.remove('border-zinc-900');
+                    radio.classList.add('border-zinc-300');
+                    radio.innerHTML = '';
+                });
+                
+                // Select this option
+                option.classList.remove('border', 'border-zinc-200');
+                option.classList.add('border-2', 'border-zinc-900');
+                const radio = option.querySelector('.w-5.h-5');
+                radio.classList.remove('border-zinc-300');
+                radio.classList.add('border-zinc-900');
+                radio.innerHTML = '<div class="w-2.5 h-2.5 rounded-full bg-zinc-900"></div>';
+            });
+        });
+
+        // Create alarm submit
+        createAlarmSubmitBtn.addEventListener('click', () => {
+            // Add logic to create alarm here
+            closeCreateAlarmPanel();
+        });
+    </script>
+</body>
+</html>

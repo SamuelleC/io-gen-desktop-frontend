@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .search-input::placeholder {
+            color: #A1A1AA;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Table view - hide scrollbar */
+        .table-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .table-container::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph-gauge text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);">
+                            <i class="ph ph-chart-bar-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-check-circle text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-bell-simple text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Dashboard Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Reports</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                                <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                                <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                            </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="hidden absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4 border-b border-zinc-100">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                                <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-200">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabs-->
+            <div id="dashboard-tabs" class="flex space-x-10 w-full mb-6" style="border-bottom: 1px solid #E4E4E7;">
+                <button class="dashboard-tab active text-sm font-medium text-gray-900 border-b-2 border-gray-900 pb-2" data-utility="energy" data-color="#34AC41" data-dark="#1D4E24">
+                    <div class="flex flex-row items-center space-x-2">
+                        <i data-lucide="zap" class="w-4 h-4" style="color: #279133;"></i>
+                        <span>Energy</span>
+                    </div>
+                </button>
+                <button class="dashboard-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent" data-utility="electricity" data-color="#8574E0" data-dark="#463877">
+                    <div class="flex flex-row items-center space-x-2">
+                        <i data-lucide="plug" class="w-4 h-4" style="color: #765AD1;"></i>
+                        <span>Electricity</span>
+                    </div>
+                </button>
+                <button class="dashboard-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent" data-utility="gas" data-color="#EF743E" data-dark="#782617">
+                    <div class="flex flex-row items-center space-x-2">
+                        <i data-lucide="flame" class="w-4 h-4" style="color: #DE4717;"></i>
+                        <span>Gas</span>
+                    </div>
+                </button>
+                <button class="dashboard-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent" data-utility="water" data-color="#0EA5E9" data-dark="#075985">
+                    <div class="flex flex-row items-center space-x-2">
+                        <i data-lucide="waves" class="w-4 h-4" style="color: #0284C7;"></i>
+                        <span>Water</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex justify-between items-center mb-6">
+                <div id="metric-filters" class="flex items-center space-x-3">
+                    <button class="metric-filter-btn active flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white">
+                        <i class="ph-chart-line-up"></i>
+                        <span>kWh</span>
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph ph-currency-gbp"></i>
+                        <span>Cost</span>   
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph-tree"></i>
+                        <span>tCO²e</span>
+                    </button>
+                </div>
+                <button id="export-report-btn" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 bg-zinc-900">
+                    <i class="ph-download-simple" style="color: #ffffff;"></i>
+                    <span class="text-white">Export report</span>
+                </button>
+            </div>
+
+            <!-- Report Content -->
+            <div class="flex bg-white rounded-xl">
+                <!-- Left Sidebar - Meters List -->
+                <div id="meters-sidebar" class="h-[657px] flex-shrink-0 p-4 border-r-2 border-stone-100 flex flex-col">
+                    <!-- Search -->
+                    <div class="mt-2 relative mb-4 flex-shrink-0">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color: #A1A1AA;"></i>
+                        <input type="text" placeholder="Search meters" class="search-input w-full pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200" style="background-color: #F5F5F4; color: #3F3F46;">
+                    </div>
+                    
+                    <!-- Meters List (Scrollable) -->
+                    <div class="relative flex-1 overflow-hidden">
+                        <div class="space-y-2 h-full overflow-y-auto pb-8" id="meters-list" style="scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                #meters-list::-webkit-scrollbar { display: none; }
+                            </style>
+                        <div class="meter-item active p-3 rounded-xl bg-white border-2 border-zinc-900 cursor-pointer">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">Caravan Plots Volume Total</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">PV Generated Total</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">Team Accommodation Volume Total</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500">Meter description</div>
+                        </div>
+                        </div>
+                        <!-- Gradient Fade Overlay -->
+                        <div id="meters-gradient" class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                    </div>
+                    
+                    <!-- Scroll Indicator -->
+                    <div id="meters-scroll-indicator" class="flex justify-center mt-2 flex-shrink-0">
+                        <div class="text-zinc-400">
+                            <i class="ph ph-caret-down text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - Chart Area -->
+                <div class="flex-1 p-6">
+                    <!-- Top Row: Time Period Tabs + View Table -->
+                    <div class="flex justify-between items-center mb-6 border-b border-zinc-200 pb-4">
+                        <!-- Time Period Tabs -->
+                        <div class="flex items-center rounded-xl" style="background-color: #F5F5F4;">
+                            <button class="time-period-btn px-6 py-2 text-sm text-zinc-500 font-medium" data-index="0">Day</button>
+                            <div class="time-divider h-5 w-px" data-divider="0" style="background-color: #E4E4E7;"></div>
+                            <button class="time-period-btn px-6 py-2 text-sm text-zinc-500 font-medium" data-index="1">Month</button>
+                            <div class="time-divider h-5 w-px" data-divider="1" style="background-color: #E4E4E7; visibility: hidden;"></div>
+                            <button class="time-period-btn active px-6 py-2 text-sm rounded-xl font-medium" data-index="2" style="color: #3F3F46; background-color: #FFFFFF; border: 1px solid #E4E4E7;">Year</button>
+                            <div class="time-divider h-5 w-px" data-divider="2" style="background-color: #E4E4E7; visibility: hidden;"></div>
+                            <button class="time-period-btn px-6 py-2 text-sm text-zinc-500 font-medium" data-index="3">All time</button>
+                        </div>
+                        
+                        <!-- View Table Button -->
+                        <button id="view-toggle-btn" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-200 bg-white hover:bg-zinc-50">
+                            <i id="view-toggle-icon" class="ph ph-table text-zinc-700"></i>
+                            <span id="view-toggle-text" class="text-zinc-700">View table</span>
+                        </button>
+                    </div>
+
+                    <!-- Year Navigation -->
+                    <div id="year-navigation" class="flex items-center justify-between mb-6">
+                        <button id="report-year-prev" class="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-zinc-200 hover:bg-zinc-50">
+                            <i class="ph ph-caret-left text-zinc-700 text-lg"></i>
+                        </button>
+                        <span id="report-year" class="text-base font-medium text-zinc-700">2025</span>
+                        <button id="report-year-next" class="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-zinc-200 hover:bg-zinc-50">
+                            <i class="ph ph-caret-right text-zinc-700 text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div id="stats-section" class="mb-6">
+                        <div class="text-sm text-zinc-500 mb-1">Last 12 months</div>
+                        <div class="text-3xl font-bold text-zinc-900">11,264,142 <span class="text-lg font-medium">kWh</span></div>
+                        <div class="text-sm text-zinc-500 mt-1">vs 12,264,142 prev 12 months</div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div id="chart-view" class="h-80 mb-4">
+                        <canvas id="reportChart"></canvas>
+                    </div>
+
+                    <!-- Table View (Hidden by default) -->
+                    <div id="table-view" class="hidden">
+                        <div class="table-container max-h-[580px] overflow-y-auto border-t border-b border-zinc-200">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-stone-100 sticky top-0 z-10">
+                                        <th id="col-period" class="text-left px-4 py-3 text-sm font-medium text-zinc-500 w-1/3">Months</th>
+                                        <th id="col-total" class="text-center px-4 py-3 text-sm font-medium text-zinc-500 w-1/3">Monthly total</th>
+                                        <th id="col-lastyear" class="text-right px-4 py-3 text-sm font-medium text-zinc-500 w-1/3">Last year</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <!-- Data rows will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Fixed Total Row -->
+                        <div class="border-t border-zinc-200 bg-white">
+                            <table class="w-full border-collapse">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left px-4 py-3 text-sm font-semibold text-zinc-900 w-1/3 border-t-1 border-zinc-200">Total</td>
+                                        <td id="total-current" class="text-center px-4 py-3 text-sm font-semibold text-zinc-900 w-1/3 border-t-1 border-zinc-200">1,558,277.8 kWh</td>
+                                        <td id="total-lastyear" class="text-right px-4 py-3 text-sm font-semibold text-zinc-900 w-1/3 border-t-1 border-zinc-200">1,587,034.5 kWh</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div id="chart-legend" class="flex items-center justify-center space-x-6">
+                        <div class="flex items-center space-x-2">
+                            <div id="legend-consumption" class="w-3 h-3 rounded" style="background-color: #34AC41;"></div>
+                            <span class="text-sm text-zinc-500">Consumption</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div id="legend-above" class="w-3 h-3 rounded" style="background-color: #1D4E24;"></div>
+                            <span class="text-sm text-zinc-500">Above comparison</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-0.5 rounded bg-black"></div>
+                            <span class="text-sm text-zinc-500">Norm</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Panel Overlay -->
+    <div id="export-overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40"></div>
+    
+    <!-- Export Panel -->
+    <div id="export-panel" class="fixed top-0 right-0 h-full bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" style="width: 512px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: #E4E4E7;">
+            <h2 class="text-base font-medium text-zinc-900">Export energy report</h2>
+            <button id="export-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                <i data-lucide="x" class="w-5 h-5 text-zinc-700"></i>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="flex-1 px-6 py-4">
+            <!-- Meter(s) -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-zinc-700 mb-2">Meter(s)</label>
+                <div class="relative">
+                    <button id="meters-dropdown-btn" class="w-full px-4 py-2 text-sm border rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 flex items-center justify-between" style="border-color: #D4D4D8;">
+                        <span id="meters-selected-text" class="text-zinc-500">Select one or more meters</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-500"></i>
+                    </button>
+                    <div id="meters-options-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-lg border border-zinc-200 z-50 py-2">
+                        <!-- Search -->
+                        <div class="px-3 pb-2">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                                <input type="text" id="meters-search-input" placeholder="Search meters" class="w-full pl-9 pr-3 py-2 rounded-xl text-sm focus:outline-none border border-zinc-200 bg-white" style="color: #71717A;">
+                            </div>
+                        </div>
+                        <!-- Select All -->
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3 border-b border-zinc-200 mb-1" data-value="all">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-900">Select all</span>
+                        </div>
+                        <!-- Meter Options -->
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="06UH859026">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">06UH859026</span>
+                        </div>
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="caravan-plots">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">Caravan Plots Volume Total</span>
+                        </div>
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="pv-generated">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">PV Generated Total</span>
+                        </div>
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="team-accommodation">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">Team Accommodation Volume Total</span>
+                        </div>
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="06UH859026-2">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">06UH859026</span>
+                        </div>
+                        <div class="meter-checkbox-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center space-x-3" data-value="06UH859026-3">
+                            <div class="meter-checkbox w-5 h-5 rounded border flex items-center justify-center" style="border-color: #D4D4D8;"></div>
+                            <span class="text-sm text-zinc-700">06UH859026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Time period / Granularity -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-zinc-700 mb-2">Time period / Granularity</label>
+                <div class="flex items-center space-x-2">
+                    <button class="export-time-btn px-6 py-2 text-sm text-zinc-500 rounded-xl border border-zinc-200 bg-white" data-index="0">Day</button>
+                    <button class="export-time-btn px-6 py-2 text-sm text-zinc-500 rounded-xl border border-zinc-200 bg-white" data-index="1">Month</button>
+                    <button class="export-time-btn active px-6 py-2 text-zinc-500 text-sm rounded-xl border-2 bg-white" data-index="2" style="color: #3F3F46; border-color: #334155;">Year</button>
+                    <button class="export-time-btn px-6 py-2 text-sm text-zinc-500 rounded-xl border border-zinc-200 bg-white" data-index="3">All time</button>
+                </div>
+            </div>
+            
+            <!-- Reporting period -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-zinc-700 mb-2">Reporting period</label>
+                <div class="relative">
+                    <button id="period-dropdown-btn" class="w-full px-4 py-2 text-sm border rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 flex items-center justify-between" style="border-color: #D4D4D8;">
+                        <span id="period-selected-text" class="text-zinc-900">Current year</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-500"></i>
+                    </button>
+                    <div id="period-options-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-lg border border-zinc-200 z-50 py-1">
+                        <div class="period-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center justify-between" data-value="current-year">
+                            <span class="text-sm text-zinc-900">Current year</span>
+                            <span class="text-sm text-zinc-500 flex items-center">01 Jan <i class="ph ph-arrow-right mx-1"></i> 10 Feb 2026</span>
+                        </div>
+                        <div class="period-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center justify-between" data-value="last-year">
+                            <span class="text-sm text-zinc-900">Last year</span>
+                            <span class="text-sm text-zinc-500 flex items-center">01 Jan <i class="ph ph-arrow-right mx-1"></i> 31 Dec 2025</span>
+                        </div>
+                        <div class="period-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center justify-between" data-value="custom">
+                            <span class="text-sm text-zinc-900">Custom...</span>
+                            <span class="text-sm text-zinc-500"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Format -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-zinc-700 mb-2">Format</label>
+                <div class="relative">
+                    <button id="format-dropdown-btn" class="w-full px-4 py-2 text-sm border rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 flex items-center justify-between" style="border-color: #D4D4D8;">
+                        <span id="format-selected-text" class="text-zinc-900">PNG</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-500"></i>
+                    </button>
+                    <div id="format-options-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-lg border border-zinc-200 z-50 py-1">
+                        <div class="format-option px-3 py-2 hover:bg-zinc-50 cursor-pointer" data-value="png">
+                            <span class="text-sm text-zinc-900">PNG</span>
+                        </div>
+                        <div class="format-option px-3 py-2 hover:bg-zinc-50 cursor-pointer" data-value="pdf">
+                            <span class="text-sm text-zinc-900">PDF</span>
+                        </div>
+                        <div class="format-option px-3 py-2 hover:bg-zinc-50 cursor-pointer" data-value="csv">
+                            <span class="text-sm text-zinc-900">CSV</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t bg-white" style="border-color: #E4E4E7;">
+            <div class="flex items-center justify-end space-x-3">
+                <button id="export-cancel-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-white border text-zinc-700 hover:bg-zinc-50" style="border-color: #D4D4D8;">
+                    Cancel
+                </button>
+                <button class="px-5 py-2.5 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800">
+                    Export report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Company dropdown functionality
+            const companySelector = document.getElementById('company-selector');
+            const companyDropdown = document.getElementById('company-dropdown');
+            
+            companySelector.addEventListener('click', (e) => {
+                e.stopPropagation();
+                companyDropdown.classList.toggle('hidden');
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                    companyDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Site item selection
+            const siteItems = document.querySelectorAll('.site-item');
+            siteItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    // Update checkmark visuals
+                    siteItems.forEach(s => {
+                        const checkbox = s.querySelector('.site-checkbox');
+                        checkbox.classList.remove('active');
+                        checkbox.style.borderColor = '#D4D4D8';
+                        checkbox.style.backgroundColor = 'transparent';
+                        checkbox.innerHTML = '';
+                    });
+                    
+                    const checkbox = item.querySelector('.site-checkbox');
+                    checkbox.classList.add('active');
+                    checkbox.style.borderColor = '#18181B';
+                    checkbox.style.backgroundColor = '#18181B';
+                    
+                    const checkIcon = document.createElement('i');
+                    checkIcon.className = 'ph ph-check text-white text-xs';
+                    checkbox.appendChild(checkIcon);
+                    
+                    // Close dropdown
+                    companyDropdown.classList.add('hidden');
+                });
+            });
+
+            // Tab switching
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            let reportChart = null;
+            let currentColor = '#34AC41';
+            let currentDarkColor = '#1D4E24';
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('active', 'text-gray-900', 'border-gray-900');
+                        t.classList.add('text-gray-500', 'border-transparent');
+                    });
+                    tab.classList.add('active', 'text-gray-900', 'border-gray-900');
+                    tab.classList.remove('text-gray-500', 'border-transparent');
+                    
+                    // Update chart colors
+                    currentColor = tab.dataset.color;
+                    currentDarkColor = tab.dataset.dark;
+                    updateChartColors(currentColor, currentDarkColor);
+                    
+                    // Update legend colors
+                    document.getElementById('legend-consumption').style.backgroundColor = currentColor;
+                    document.getElementById('legend-above').style.backgroundColor = currentDarkColor;
+                });
+            });
+
+            // Metric filter buttons (kWh, Cost, tCO₂e)
+            const metricFilters = document.querySelectorAll('.metric-filter-btn');
+            metricFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    metricFilters.forEach(b => {
+                        b.classList.remove('active', 'bg-gray-900', 'text-white');
+                        b.classList.add('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                        const icon = b.querySelector('i');
+                        if (icon) icon.classList.add('text-zinc-500');
+                    });
+                    btn.classList.add('active', 'bg-gray-900', 'text-white');
+                    btn.classList.remove('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                    const icon = btn.querySelector('i');
+                    if (icon) icon.classList.remove('text-zinc-500');
+                });
+            });
+
+            // Meter list selection
+            const meterItems = document.querySelectorAll('.meter-item');
+            meterItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    meterItems.forEach(m => {
+                        m.classList.remove('active', 'border-2', 'border-zinc-900');
+                        m.classList.add('border', 'border-zinc-200');
+                    });
+                    item.classList.add('active', 'border-2', 'border-zinc-900');
+                    item.classList.remove('border', 'border-zinc-200');
+                });
+            });
+
+            // Time period tabs
+            const timePeriodBtns = document.querySelectorAll('.time-period-btn');
+            const timeDividers = document.querySelectorAll('.time-divider');
+            let currentTimePeriod = 'Year'; // Track current time period
+            
+            timePeriodBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset all buttons
+                    timePeriodBtns.forEach(b => {
+                        b.classList.remove('active', 'rounded-xl');
+                        b.classList.add('text-zinc-500');
+                        b.style.backgroundColor = '';
+                        b.style.color = '';
+                        b.style.border = '';
+                    });
+                    
+                    // Show all dividers
+                    timeDividers.forEach(d => {
+                        d.style.visibility = 'visible';
+                    });
+                    
+                    // Set active button
+                    btn.classList.add('active', 'rounded-xl');
+                    btn.classList.remove('text-zinc-500');
+                    btn.style.backgroundColor = '#FFFFFF';
+                    btn.style.color = '#3F3F46';
+                    btn.style.border = '1px solid #E4E4E7';
+                    
+                    // Hide adjacent dividers
+                    const index = parseInt(btn.dataset.index);
+                    if (index > 0) {
+                        const leftDivider = document.querySelector(`[data-divider="${index - 1}"]`);
+                        if (leftDivider) leftDivider.style.visibility = 'hidden';
+                    }
+                    if (index < 3) {
+                        const rightDivider = document.querySelector(`[data-divider="${index}"]`);
+                        if (rightDivider) rightDivider.style.visibility = 'hidden';
+                    }
+                    
+                    // Update current time period
+                    currentTimePeriod = btn.textContent.trim();
+                    updateTableHeaders();
+                    populateTableData();
+                    updateChartForPeriod(currentTimePeriod);
+                });
+            });
+
+            // Year navigation
+            let currentYear = 2025;
+            const yearDisplay = document.getElementById('report-year');
+            
+            document.getElementById('report-year-prev').addEventListener('click', () => {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+            });
+            
+            document.getElementById('report-year-next').addEventListener('click', () => {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+            });
+
+            // =====================
+            // Report Chart
+            // =====================
+            
+            const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            // Vertical dashed grid plugin - dynamic based on data length
+            const verticalDashedGridPlugin = {
+                id: 'verticalDashedGrid',
+                beforeDatasetsDraw(chart) {
+                    const { ctx, chartArea, data } = chart;
+                    const dataLength = data.labels.length;
+                    const columnWidth = (chartArea.right - chartArea.left) / dataLength;
+                    
+                    ctx.save();
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeStyle = '#E5E7EB';
+                    ctx.lineWidth = 1;
+                    
+                    for (let i = 0; i <= dataLength; i++) {
+                        const x = chartArea.left + (i * columnWidth);
+                        ctx.beginPath();
+                        ctx.moveTo(x, chartArea.top);
+                        ctx.lineTo(x, chartArea.bottom);
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+            };
+
+            // Norm line plugin - dynamic based on data length
+            function createNormLinePlugin(normValues) {
+                return {
+                    id: 'normLine',
+                    normData: normValues,
+                    afterDatasetsDraw(chart) {
+                        const { ctx, chartArea, scales, data } = chart;
+                        const yAxis = scales.yRight;
+                        const dataLength = data.labels.length;
+                        const columnWidth = (chartArea.right - chartArea.left) / dataLength;
+                        const currentNorm = this.normData;
+                        
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#1f2937';
+                        ctx.lineWidth = 2;
+                        
+                        currentNorm.forEach((val, i) => {
+                            const barCenterX = chartArea.left + (i * columnWidth) + (columnWidth / 2);
+                            const y = yAxis.getPixelForValue(val);
+                            
+                            if (i === 0) {
+                                ctx.moveTo(barCenterX, y);
+                            } else {
+                                ctx.lineTo(barCenterX, y);
+                            }
+                        });
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                };
+            }
+
+            // Generate bar colors based on norm comparison
+            function generateBarColors(data, normValues, belowColor, aboveColor) {
+                return data.map((value, i) => value > normValues[i] ? aboveColor : belowColor);
+            }
+
+            // Report chart data (in hundred thousands)
+            const reportData = [105000, 110000, 105000, 100000, 105000, 125000, 120000, 115000, 110000, 75000, 70000, 65000];
+            const reportNorm = [115000, 115000, 115000, 110000, 110000, 115000, 115000, 110000, 105000, 95000, 90000, 85000];
+            const reportColors = generateBarColors(reportData, reportNorm, '#34AC41', '#1D4E24');
+
+            // Create report chart
+            const reportChartCtx = document.getElementById('reportChart').getContext('2d');
+            reportChart = new Chart(reportChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: MONTHS,
+                    datasets: [{
+                        data: reportData,
+                        backgroundColor: reportColors,
+                        borderRadius: 4,
+                        barThickness: 40,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    transitions: {
+                        active: { animation: { duration: 0 } }
+                    },
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#6b7280', font: { size: 11 } }
+                        },
+                        y: {
+                            display: false,
+                            beginAtZero: true,
+                            max: 160000
+                        },
+                        yRight: {
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 160000,
+                            grid: { 
+                                color: (ctx) => ctx.tick.value === 0 ? 'transparent' : '#E5E7EB',
+                                drawBorder: false,
+                                lineWidth: 1,
+                                drawTicks: false
+                            },
+                            border: { display: false },
+                            ticks: { 
+                                stepSize: 20000,
+                                color: '#6b7280',
+                                font: { size: 11 },
+                                callback: (value) => value === 0 ? 'kWh' : (value % 40000 === 0 ? value.toLocaleString() : '')
+                            }
+                        }
+                    }
+                },
+                plugins: [verticalDashedGridPlugin, createNormLinePlugin(reportNorm)]
+            });
+            
+            // Function to update chart for different time periods
+            function updateChartForPeriod(period) {
+                if (!reportChart) return;
+                
+                let labels, data, norm, barWidth;
+                
+                if (period === 'Day') {
+                    // 24 hours - bar width scaled from 40px base
+                    labels = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
+                    data = Array.from({ length: 24 }, () => Math.floor(Math.random() * 80000) + 20000);
+                    norm = Array.from({ length: 24 }, () => Math.floor(Math.random() * 30000) + 50000);
+                    barWidth = 20;
+                } else if (period === 'Month') {
+                    // 31 days max - bar width scaled from 40px base
+                    labels = Array.from({ length: 31 }, (_, i) => `${i + 1}`);
+                    data = Array.from({ length: 31 }, () => Math.floor(Math.random() * 60000) + 30000);
+                    norm = Array.from({ length: 31 }, () => Math.floor(Math.random() * 20000) + 50000);
+                    barWidth = 15;
+                } else if (period === 'All time') {
+                    // Show years - bar width wider for fewer bars
+                    labels = ['2020', '2021', '2022', '2023', '2024', '2025'];
+                    data = [98000, 105000, 112000, 108000, 115000, 110000];
+                    norm = [100000, 100000, 105000, 105000, 110000, 110000];
+                    barWidth = 70;
+                } else {
+                    // Year - 12 months, 40px width
+                    labels = MONTHS;
+                    data = reportData;
+                    norm = reportNorm;
+                    barWidth = 40;
+                }
+                
+                const colors = generateBarColors(data, norm, '#34AC41', '#1D4E24');
+                
+                reportChart.data.labels = labels;
+                reportChart.data.datasets[0].data = data;
+                reportChart.data.datasets[0].backgroundColor = colors;
+                reportChart.data.datasets[0].barThickness = barWidth;
+                reportChart.data.datasets[0].maxBarThickness = barWidth;
+                
+                // Update the norm line plugin data
+                const normPlugin = reportChart.config.plugins.find(p => p.id === 'normLine');
+                if (normPlugin) {
+                    normPlugin.normData = norm;
+                }
+                
+                reportChart.update('none');
+            }
+            
+            // Function to update chart colors
+            function updateChartColors(belowColor, aboveColor) {
+                const newColors = generateBarColors(reportData, reportNorm, belowColor, aboveColor);
+                reportChart.data.datasets[0].backgroundColor = newColors;
+                reportChart.update('none');
+            }
+            
+            // =====================
+            // Table View Toggle
+            // =====================
+            
+            const viewToggleBtn = document.getElementById('view-toggle-btn');
+            const viewToggleIcon = document.getElementById('view-toggle-icon');
+            const viewToggleText = document.getElementById('view-toggle-text');
+            const chartView = document.getElementById('chart-view');
+            const tableView = document.getElementById('table-view');
+            const chartLegend = document.getElementById('chart-legend');
+            const yearNavigation = document.getElementById('year-navigation');
+            const statsSection = document.getElementById('stats-section');
+            let isTableView = false;
+            
+            // Sample data for different time periods
+            const monthlyData = [
+                { period: 'January', current: '185,699.2 kWh', lastYear: '195,489.1 kWh' },
+                { period: 'February', current: '175,809.3 kWh', lastYear: '165,919.4 kWh' },
+                { period: 'March', current: '155,329.5 kWh', lastYear: '145,539.6 kWh' },
+                { period: 'April', current: '135,749.7 kWh', lastYear: '125,959.8 kWh' },
+                { period: 'May', current: '115,269.9 kWh', lastYear: '195,470.0 kWh' },
+                { period: 'June', current: '185,680.1 kWh', lastYear: '175,890.2 kWh' },
+                { period: 'July', current: '165,100.3 kWh', lastYear: '155,310.4 kWh' },
+                { period: 'August', current: '145,520.5 kWh', lastYear: '135,730.6 kWh' },
+                { period: 'September', current: '125,940.7 kWh', lastYear: '115,250.8 kWh' },
+                { period: 'October', current: '195,460.9 kWh', lastYear: '185,671.0 kWh' },
+                { period: 'November', current: '175,881.1 kWh', lastYear: '165,191.2 kWh' },
+                { period: 'December', current: '155,301.3 kWh', lastYear: '145,511.4 kWh' }
+            ];
+            
+            const dailyData = Array.from({ length: 31 }, (_, i) => ({
+                period: `${i + 1}`,
+                current: `${(Math.random() * 5000 + 1000).toFixed(1)} kWh`,
+                lastYear: `${(Math.random() * 5000 + 1000).toFixed(1)} kWh`
+            }));
+            
+            const hourlyData = Array.from({ length: 24 }, (_, i) => ({
+                period: `${String(i).padStart(2, '0')}:00:00`,
+                current: `${(Math.random() * 500 + 100).toFixed(1)} kWh`,
+                lastYear: `${(Math.random() * 500 + 100).toFixed(1)} kWh`
+            }));
+            
+            function updateTableHeaders() {
+                const colPeriod = document.getElementById('col-period');
+                const colTotal = document.getElementById('col-total');
+                
+                if (currentTimePeriod === 'Day') {
+                    colPeriod.textContent = 'Hours';
+                    colTotal.textContent = 'Hourly total';
+                } else if (currentTimePeriod === 'Month') {
+                    colPeriod.textContent = 'Days';
+                    colTotal.textContent = 'Daily total';
+                } else {
+                    colPeriod.textContent = 'Months';
+                    colTotal.textContent = 'Monthly total';
+                }
+            }
+            
+            function populateTableData() {
+                const tableBody = document.getElementById('table-body');
+                const totalCurrent = document.getElementById('total-current');
+                const totalLastYear = document.getElementById('total-lastyear');
+                
+                let data;
+                if (currentTimePeriod === 'Day') {
+                    data = hourlyData;
+                } else if (currentTimePeriod === 'Month') {
+                    data = dailyData;
+                } else {
+                    data = monthlyData;
+                }
+                
+                // Clear existing rows
+                tableBody.innerHTML = '';
+                
+                // Add data rows
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-zinc-100 hover:bg-zinc-50';
+                    tr.innerHTML = `
+                        <td class="text-left px-4 py-3 text-sm text-zinc-700 w-1/3">${row.period}</td>
+                        <td class="text-center px-4 py-3 text-sm text-zinc-700 w-1/3">${row.current}</td>
+                        <td class="text-right px-4 py-3 text-sm text-zinc-700 w-1/3">${row.lastYear}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+                
+                // Update totals based on time period
+                if (currentTimePeriod === 'Day') {
+                    totalCurrent.textContent = '5,234.5 kWh';
+                    totalLastYear.textContent = '5,123.4 kWh';
+                } else if (currentTimePeriod === 'Month') {
+                    totalCurrent.textContent = '125,678.9 kWh';
+                    totalLastYear.textContent = '118,456.7 kWh';
+                } else {
+                    totalCurrent.textContent = '1,558,277.8 kWh';
+                    totalLastYear.textContent = '1,587,034.5 kWh';
+                }
+            }
+            
+            viewToggleBtn.addEventListener('click', () => {
+                isTableView = !isTableView;
+                
+                const metersSidebar = document.getElementById('meters-sidebar');
+                const metersGradient = document.getElementById('meters-gradient');
+                const metersScrollIndicator = document.getElementById('meters-scroll-indicator');
+                const metersList = document.getElementById('meters-list');
+                
+                if (isTableView) {
+                    // Show table, hide chart
+                    chartView.classList.add('hidden');
+                    tableView.classList.remove('hidden');
+                    chartLegend.classList.add('hidden');
+                    statsSection.classList.add('hidden');
+                    viewToggleIcon.className = 'ph ph-chart-bar text-zinc-700';
+                    viewToggleText.textContent = 'View graph';
+                    
+                    // Make meters list non-scrollable for table view
+                    metersSidebar.classList.remove('h-[657px]');
+                    metersSidebar.classList.add('h-auto');
+                    metersList.classList.remove('overflow-y-auto');
+                    metersList.classList.add('overflow-visible');
+                    metersGradient.classList.add('hidden');
+                    metersScrollIndicator.classList.add('hidden');
+                    
+                    // Populate table data
+                    updateTableHeaders();
+                    populateTableData();
+                } else {
+                    // Show chart, hide table
+                    chartView.classList.remove('hidden');
+                    tableView.classList.add('hidden');
+                    chartLegend.classList.remove('hidden');
+                    yearNavigation.classList.remove('hidden');
+                    statsSection.classList.remove('hidden');
+                    viewToggleIcon.className = 'ph ph-table text-zinc-700';
+                    viewToggleText.textContent = 'View table';
+                    
+                    // Restore scrollable meters list for chart view
+                    metersSidebar.classList.add('h-[657px]');
+                    metersSidebar.classList.remove('h-auto');
+                    metersList.classList.add('overflow-y-auto');
+                    metersList.classList.remove('overflow-visible');
+                    metersGradient.classList.remove('hidden');
+                    metersScrollIndicator.classList.remove('hidden');
+                }
+            });
+            
+            // Initialize table data
+            populateTableData();
+            
+            // =====================
+            // Export Panel
+            // =====================
+            
+            const exportBtn = document.getElementById('export-report-btn');
+            const exportPanel = document.getElementById('export-panel');
+            const exportOverlay = document.getElementById('export-overlay');
+            const exportCloseBtn = document.getElementById('export-close-btn');
+            const exportCancelBtn = document.getElementById('export-cancel-btn');
+            
+            function openExportPanel() {
+                exportPanel.classList.remove('translate-x-full');
+                exportOverlay.classList.remove('hidden');
+                lucide.createIcons();
+            }
+            
+            function closeExportPanel() {
+                exportPanel.classList.add('translate-x-full');
+                exportOverlay.classList.add('hidden');
+            }
+            
+            exportBtn.addEventListener('click', openExportPanel);
+            exportCloseBtn.addEventListener('click', closeExportPanel);
+            exportCancelBtn.addEventListener('click', closeExportPanel);
+            exportOverlay.addEventListener('click', closeExportPanel);
+            
+            // Export panel time period tabs
+            const exportTimeBtns = document.querySelectorAll('.export-time-btn');
+            
+            exportTimeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    exportTimeBtns.forEach(b => {
+                        b.classList.remove('active', 'border-2');
+                        b.classList.add('text-zinc-500', 'border-zinc-200', 'border');
+                        b.style.borderColor = '';
+                        b.style.color = '';
+                    });
+                    
+                    btn.classList.add('active', 'border-2');
+                    btn.classList.remove('text-zinc-500', 'border-zinc-200', 'border');
+                    btn.style.borderColor = '#334155';
+                    btn.style.color = '#3F3F46';
+                });
+            });
+            
+            // =====================
+            // Export Panel Dropdowns
+            // =====================
+            
+            // Meters Dropdown
+            const metersDropdownBtn = document.getElementById('meters-dropdown-btn');
+            const metersOptionsDropdown = document.getElementById('meters-options-dropdown');
+            const metersSelectedText = document.getElementById('meters-selected-text');
+            const meterCheckboxOptions = document.querySelectorAll('.meter-checkbox-option');
+            let selectedMeters = [];
+            
+            metersDropdownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                metersOptionsDropdown.classList.toggle('hidden');
+                periodOptionsDropdown.classList.add('hidden');
+                formatOptionsDropdown.classList.add('hidden');
+            });
+            
+            meterCheckboxOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = option.dataset.value;
+                    const checkbox = option.querySelector('.meter-checkbox');
+                    
+                    if (value === 'all') {
+                        // Toggle select all
+                        const isAllSelected = checkbox.classList.contains('active');
+                        meterCheckboxOptions.forEach(opt => {
+                            const cb = opt.querySelector('.meter-checkbox');
+                            if (isAllSelected) {
+                                cb.classList.remove('active');
+                                cb.style.borderColor = '#D4D4D8';
+                                cb.style.backgroundColor = 'transparent';
+                                cb.innerHTML = '';
+                            } else {
+                                cb.classList.add('active');
+                                cb.style.borderColor = '#18181B';
+                                cb.style.backgroundColor = '#18181B';
+                                cb.innerHTML = '<i class="ph ph-check text-white text-xs"></i>';
+                            }
+                        });
+                        selectedMeters = isAllSelected ? [] : Array.from(meterCheckboxOptions).map(o => o.dataset.value).filter(v => v !== 'all');
+                    } else {
+                        // Toggle individual meter
+                        if (checkbox.classList.contains('active')) {
+                            checkbox.classList.remove('active');
+                            checkbox.style.borderColor = '#D4D4D8';
+                            checkbox.style.backgroundColor = 'transparent';
+                            checkbox.innerHTML = '';
+                            selectedMeters = selectedMeters.filter(m => m !== value);
+                            // Uncheck "Select all" if unchecking individual
+                            const allCheckbox = document.querySelector('.meter-checkbox-option[data-value="all"] .meter-checkbox');
+                            allCheckbox.classList.remove('active');
+                            allCheckbox.style.borderColor = '#D4D4D8';
+                            allCheckbox.style.backgroundColor = 'transparent';
+                            allCheckbox.innerHTML = '';
+                        } else {
+                            checkbox.classList.add('active');
+                            checkbox.style.borderColor = '#18181B';
+                            checkbox.style.backgroundColor = '#18181B';
+                            checkbox.innerHTML = '<i class="ph ph-check text-white text-xs"></i>';
+                            selectedMeters.push(value);
+                        }
+                    }
+                    
+                    // Update selected text
+                    if (selectedMeters.length === 0) {
+                        metersSelectedText.textContent = 'Select one or more meters';
+                        metersSelectedText.classList.add('text-zinc-500');
+                        metersSelectedText.classList.remove('text-zinc-900');
+                    } else {
+                        metersSelectedText.textContent = selectedMeters.length + ' meter' + (selectedMeters.length > 1 ? 's' : '') + ' selected';
+                        metersSelectedText.classList.remove('text-zinc-500');
+                        metersSelectedText.classList.add('text-zinc-900');
+                    }
+                });
+            });
+            
+            // Period Dropdown
+            const periodDropdownBtn = document.getElementById('period-dropdown-btn');
+            const periodOptionsDropdown = document.getElementById('period-options-dropdown');
+            const periodSelectedText = document.getElementById('period-selected-text');
+            const periodOptions = document.querySelectorAll('.period-option');
+            
+            periodDropdownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                periodOptionsDropdown.classList.toggle('hidden');
+                metersOptionsDropdown.classList.add('hidden');
+                formatOptionsDropdown.classList.add('hidden');
+            });
+            
+            periodOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const label = option.querySelector('span:first-child').textContent;
+                    periodSelectedText.textContent = label;
+                    periodOptionsDropdown.classList.add('hidden');
+                });
+            });
+            
+            // Format Dropdown
+            const formatDropdownBtn = document.getElementById('format-dropdown-btn');
+            const formatOptionsDropdown = document.getElementById('format-options-dropdown');
+            const formatSelectedText = document.getElementById('format-selected-text');
+            const formatOptions = document.querySelectorAll('.format-option');
+            
+            formatDropdownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                formatOptionsDropdown.classList.toggle('hidden');
+                metersOptionsDropdown.classList.add('hidden');
+                periodOptionsDropdown.classList.add('hidden');
+            });
+            
+            formatOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const label = option.querySelector('span').textContent;
+                    formatSelectedText.textContent = label;
+                    formatOptionsDropdown.classList.add('hidden');
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!metersDropdownBtn.contains(e.target) && !metersOptionsDropdown.contains(e.target)) {
+                    metersOptionsDropdown.classList.add('hidden');
+                }
+                if (!periodDropdownBtn.contains(e.target) && !periodOptionsDropdown.contains(e.target)) {
+                    periodOptionsDropdown.classList.add('hidden');
+                }
+                if (!formatDropdownBtn.contains(e.target) && !formatOptionsDropdown.contains(e.target)) {
+                    formatOptionsDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

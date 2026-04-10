@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-100  font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph-gauge text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-chart-bar text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);">
+                            <i class="ph ph-check-circle-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-bell-simple text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Dashboard Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Actions</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                            <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                        </div>
+                        <div>
+                            <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                            <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                        </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 hidden z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color: #A1A1AA;"></i>
+                                <input type="text" placeholder="Search sites" class="search-input w-full pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200" style="background-color: #F5F5F4; color: #3F3F46;">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top Section: Progress Bars & Personalisation -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 my-6">
+                <!-- Progress Bars Card -->
+                <div class="bg-green-950 p-6 rounded-2xl shadow-sm border border-zinc-100" style="max-height: 220px;">
+                    <div class="space-y-1.5">
+                        <!-- Consumption -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Consumption</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 41.6%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">5/12</span>
+                        </div>
+                        <!-- Efficiency -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Efficiency</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 75%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">6/8</span>
+                        </div>
+                        <!-- Low carbon -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Low carbon</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 31.25%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">5/16</span>
+                        </div>
+                        <!-- On-site generation -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">On-site generation</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 16.6%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">1/6</span>
+                        </div>
+                        <!-- Renewable energy -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Renewable energy</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 62.5%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">5/8</span>
+                        </div>
+                        <!-- Supply chain score -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Supply chain score</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 33.3%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">2/6</span>
+                        </div>
+                        <!-- Offsetting -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-white w-36">Offsetting</span>
+                            <div class="flex-1 mx-4 h-4 bg-zinc-200 rounded overflow-hidden">
+                                <div class="h-full rounded" style="width: 33.3%; background-color: #51a542;"></div>
+                            </div>
+                            <span class="text-xs font-medium text-zinc-400 w-10 text-right">1/3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personalisation Card -->
+                <div class="bg-blue-100 p-6 rounded-2xl flex items-center justify-between" style="max-height: 220px;">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex flex-col items-start">
+                            <i class="ph ph-magic-wand" style="width: 40px; height: 40px; font-size: 40px; color: #0c3112;"></i>
+                            <h3 class="mt-4 text-lg font-medium text-zinc-900 ">Personalise your recommendations</h3>
+                            <p class="mt-1 text-base text-zinc-700">Complete an energy audit to personalise your recommended actions.</p>
+                            <button class="mt-6 px-4 py-2 bg-white rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                                Start an energy audit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Row -->
+            <div class="flex items-center mb-6">
+                <div class="flex items-center space-x-3">
+                    <!-- Category Filter -->
+                    <div class="relative">
+                        <button id="category-filter-btn" class="filter-btn inline-flex items-center px-4 py-2 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                            Category
+                            <i class="ph ph-caret-down ml-2 text-zinc-600"></i>
+                        </button>
+                        <div id="category-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[200px]">
+                            <div class="p-2">
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Operational efficiency">Operational efficiency</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="On-site generation">On-site generation</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Low carbon heating">Low carbon heating</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Offsetting">Offsetting</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Supply chain score">Supply chain score</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Renewable energy">Renewable energy</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="category" data-value="Consumption">Consumption</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Status Filter -->
+                    <div class="relative">
+                        <button id="status-filter-btn" class="filter-btn inline-flex items-center px-4 py-2 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                            Status
+                            <i class="ph ph-caret-down ml-2 text-zinc-600"></i>
+                        </button>
+                        <div id="status-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[160px]">
+                            <div class="p-2">
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="status" data-value="Implemented">Implemented</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="status" data-value="Not started">Not started</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="status" data-value="In progress">In progress</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Impact Filter -->
+                    <div class="relative">
+                        <button id="impact-filter-btn" class="filter-btn inline-flex items-center px-4 py-2 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                            Impact
+                            <i class="ph ph-caret-down ml-2 text-zinc-600"></i>
+                        </button>
+                        <div id="impact-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[160px]">
+                            <div class="p-2">
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="impact" data-value="Low impact">Low impact</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="impact" data-value="Medium impact">Medium impact</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="impact" data-value="High impact">High impact</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Energy Filter -->
+                    <div class="relative">
+                        <button id="energy-filter-btn" class="filter-btn inline-flex items-center px-4 py-2 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                            Energy
+                            <i class="ph ph-caret-down ml-2 text-zinc-600"></i>
+                        </button>
+                        <div id="energy-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[140px]">
+                            <div class="p-2">
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="energy" data-value="Electricity">Electricity</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="energy" data-value="Gas">Gas</div>
+                                <div class="filter-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-filter="energy" data-value="Water">Water</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Shortlisted Filter -->
+                    <button id="shortlisted-filter-btn" class="filter-btn inline-flex items-center px-4 py-2 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors">
+                        <i class="ph ph-star mr-2 text-zinc-500"></i>
+                        Shortlisted
+                    </button>
+                    <!-- Reset Filters -->
+                    <button id="reset-filters-btn" class="inline-flex items-center text-sm font-medium transition-colors ml-2 hidden" style="color: #71717A;">
+                        <i data-lucide="x" class="w-4 h-4 mr-1" style="color: #71717A;"></i>
+                        Reset filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Cards Grid -->
+            <div id="action-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style="overflow-y: auto;">
+                <!-- Cards will be rendered dynamically -->
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Details Panel Overlay -->
+    <div id="action-panel-overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40"></div>
+    
+    <!-- Action Details Panel -->
+    <div id="action-details-panel" class="fixed top-0 right-0 h-full bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" style="width: 512px;">
+        
+        <!-- Action Details View -->
+        <div id="action-details-view" class="flex flex-col h-full">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: #E4E4E7;">
+                <h2 class="text-base font-medium text-zinc-900">Action details</h2>
+                <button id="action-panel-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                    <i data-lucide="x" class="w-5 h-5 text-zinc-700"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="flex-1 px-6 py-4">
+                <!-- Tags Row -->
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2 text-xs text-zinc-500">
+                        <span id="panel-energy-tag" class="inline-flex items-center">
+                        <span class="w-5 h-5 rounded-lg flex items-center justify-center mr-1.5" style="background-color: #8574E0;">
+                            <i data-lucide="plug" class="w-3 h-3" style="color: white;"></i>
+                        </span>
+                        Electricity
+                    </span>
+                    <span class="text-xs font-medium text-zinc-400">·</span>
+                    <span id="panel-impact-tag" class="inline-flex items-center">
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center mr-1" style="background-color: #B9EEBE;">
+                            <i data-lucide="signal" class="w-3 h-3"></i>
+                        </span>
+                        High impact
+                    </span>
+                    <span class="text-xs font-medium text-zinc-400">·</span>
+                    <span class="inline-flex items-center">
+                        <img src="/assets/small-gray-logo.svg" alt="" class="mr-1" style="width: 15px; height: 12px;">
+                        <span id="panel-source">io-Smart Actions</span>
+                    </span>
+                </div>
+                <span id="panel-status-tag" class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">Not started</span>
+            </div>
+            
+            <!-- Title -->
+            <h3 id="panel-title" class="text-xl font-medium text-zinc-900 mb-3">Install smart lightning controls</h3>
+            
+            <!-- Shortlist Button -->
+            <button id="panel-shortlist-btn" class="inline-flex items-center px-3 py-1.5 bg-white border border-zinc-300 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors mb-4" data-shortlisted="false">
+                <i class="ph ph-star mr-2 text-zinc-500" id="shortlist-icon"></i>
+                <span id="shortlist-text">Shortlist</span>
+            </button>
+            
+            <!-- Description -->
+            <p id="panel-description" class="text-base text-zinc-700 mb-3">Automated lightning controls ensure lights are only used when they need to be, reducing your electricity consumption. The common types are:</p>
+            
+            <!-- Bullet Points -->
+            <ul class="space-y-2 mb-4">
+                <li class="flex items-start text-base text-zinc-700">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-2.5 mr-2 flex-shrink-0"></span>
+                    <span><strong class="text-zinc-700">Presence sensors:</strong> These will detect whether people are present and turn on light accordingly. The two most common types are desk sensors and movement sensors in the ceiling fittings.</span>
+                </li>
+                <li class="flex items-start text-base text-zinc-700">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-2.5 mr-2 flex-shrink-0"></span>
+                    <span><strong class="text-zinc-700">Timers or daylight based:</strong> Automating lights based on daylight hours ensures light only turn on when it's dark.</span>
+                </li>
+            </ul>
+            
+            <!-- Estimated Savings Section -->
+            <div class="mb-4">
+                <h4 class="text-base font-medium text-zinc-900 mb-2">Estimated savings</h4>
+                <div class="rounded-lg bg-stone-50 px-3">
+                    <div class="flex items-center justify-between py-2 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-700">Estimated investment</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">£1,200</strong></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-700">Estimated carbon savings</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">20 tCO2e</strong></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-700">Estimated energy savings</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">300 kWh</strong></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-zinc-700">Estimated cost savings</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">£650</strong></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actual Savings Section -->
+            <div>
+                <h4 class="text-base font-medium text-zinc-900 mb-2">Actual savings</h4>
+                <div class="rounded-lg bg-stone-50 px-3">
+                    <div class="flex items-center justify-between py-2 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-700">Investment</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">£1,200</strong></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-700">Carbon savings</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">20 tCO2e</strong></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-sm text-zinc-700">Energy savings</span>
+                        <span><strong class="text-sm font-medium text-zinc-700">300 kWh</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t bg-white" style="border-color: #E4E4E7;">
+                <div class="flex items-center justify-end">
+                    <button id="take-action-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800 w-auto">
+                        Take action
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Update Action View -->
+        <div id="update-action-view" class="flex flex-col h-full hidden">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: #E4E4E7;">
+                <h2 class="text-base font-medium text-zinc-900">Update action</h2>
+                <button id="update-panel-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                    <i data-lucide="x" class="w-5 h-5 text-zinc-700"></i>
+                </button>
+            </div>
+            
+            <!-- Form Content -->
+            <div class="flex-1 px-6 py-4">
+                <!-- Status -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Status</label>
+                    <div class="relative">
+                        <button id="status-dropdown-btn" class="w-full px-4 py-2 text-sm border rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-200 flex items-center justify-between" style="border-color: #D4D4D8;">
+                            <span id="status-selected-tag" class="px-2 py-1 bg-lime-100 text-xs font-medium rounded" style="color: #23762C;">Implemented</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-500"></i>
+                        </button>
+                        <input type="hidden" id="update-status-select" value="implemented">
+                        <div id="status-options-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-lg border border-zinc-200 z-50 py-1">
+                            <div class="status-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center" data-value="implemented">
+                                <span class="px-2 py-1 bg-lime-100 text-xs font-medium rounded" style="color: #23762C;">Implemented</span>
+                            </div>
+                            <div class="status-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center" data-value="not-started">
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">Not started</span>
+                            </div>
+                            <div class="status-option px-3 py-2 hover:bg-zinc-50 cursor-pointer flex items-center" data-value="in-progress">
+                                <span class="px-2 py-1 bg-sky-100 text-sky-700 text-xs font-medium rounded">In progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Date -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Date</label>
+                    <div class="relative">
+                        <button type="button" id="date-picker-btn" class="w-full px-4 py-3 text-sm border rounded-xl text-left bg-white flex items-center justify-start" style="border-color: #D4D4D8;">
+                            <i class="ph ph-calendar-blank flex items-center justify-center" style="width: 18px; height: 18px; font-size: 18px; color: #71717A;"></i>
+                            <span id="selected-date-display" class="text-base text-zinc-700 ml-2 leading-none">29/01/2026</span>
+                        </button>
+                        <input type="date" id="hidden-date-input" class="absolute opacity-0 pointer-events-none" value="2026-01-29">
+                        
+                        <!-- Calendar Dropdown -->
+                        <div id="calendar-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 p-4" style="width: 280px;">
+                            <div class="flex items-center justify-between mb-3">
+                                <button type="button" id="prev-month-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                                    <i class="ph ph-caret-left text-zinc-600"></i>
+                                </button>
+                                <span id="calendar-month-year" class="text-sm font-medium text-zinc-900">January 2026</span>
+                                <button type="button" id="next-month-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                                    <i class="ph ph-caret-right text-zinc-600"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-7 gap-1 mb-2">
+                                <span class="text-xs text-zinc-500 text-center py-1">Su</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">Mo</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">Tu</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">We</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">Th</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">Fr</span>
+                                <span class="text-xs text-zinc-500 text-center py-1">Sa</span>
+                            </div>
+                            <div id="calendar-days" class="grid grid-cols-7 gap-1">
+                                <!-- Days will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actual values -->
+                <h3 class="text-base font-medium text-zinc-900 mb-4">Actual values</h3>
+                
+                <!-- Actual energy -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Actual energy</label>
+                        <div class="relative">
+                            <input type="text" id="update-energy" placeholder="Enter actual energy savings" class="w-full px-4 py-2 pr-12 text-base border rounded-xl text-zinc-500" style="border-color: #D4D4D8;">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-base text-zinc-700">kWh</span>
+                    </div>
+                </div>
+                
+                <!-- Actual carbon -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Actual carbon</label>
+                    <div class="relative">
+                        <input type="text" id="update-carbon" placeholder="Enter actual carbon savings" class="w-full px-4 py-2 pr-14 text-base border rounded-xl text-zinc-500" style="border-color: #D4D4D8;">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-base text-zinc-700">kgCO2</span>
+                    </div>
+                </div>
+                
+                <!-- Actual cost -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Actual cost</label>
+                    <div class="relative">
+                        <input type="text" id="update-cost" placeholder="Enter actual cost savings" class="w-full px-7 py-2 text-base border rounded-xl" style="border-color: #D4D4D8;">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-base text-zinc-700">£</span>
+                    </div>
+                </div>
+                
+                <!-- Actual investment -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-zinc-700 mb-2">Actual investment</label>
+                    <div class="relative">
+                        <input type="text" id="update-investment" placeholder="Enter actual investment" class="w-full px-7 py-2 text-base border rounded-xl" style="border-color: #D4D4D8;">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-base text-zinc-700">£</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t bg-white" style="border-color: #E4E4E7;">
+                <div class="flex items-center justify-end space-x-3">
+                    <button id="update-cancel-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-white border text-zinc-700 hover:bg-zinc-50" style="border-color: #D4D4D8;">
+                        Cancel
+                    </button>
+                    <button id="update-submit-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800">
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Action Cards Data - Add/edit your cards here
+        const actionCardsData = [
+            {
+                category: 'Operational efficiency',
+                status: 'Implemented',
+                impact: 'Low impact',
+                energy: 'Electricity',
+                title: 'Encourage staff to adopt sustainable energy practices',
+                description: 'This action encourages staff to use energy wisely in their daily work, helping to save resources, reduce costs, and support sustainability goals.',
+                source: 'BCC Energy Audit'
+            },
+            {
+                category: 'Operational efficiency',
+                status: 'Not started',
+                impact: 'High impact',
+                energy: 'Electricity',
+                title: 'Develop policies to ensure sustainability is considered in all procurement',
+                description: 'This action involves developing policies to ensure sustainability is built into all procurement processes, for example by prioritising energy-efficient equipment, low-c...',
+                source: 'BCC Energy Audit'
+            },
+            {
+                category: 'Operational efficiency',
+                status: 'In progress',
+                impact: 'Medium impact',
+                energy: 'Electricity',
+                title: 'Utilise timer controls on catering equipment',
+                description: 'This action ensures timer controls are effectively used on catering equipment to minimise unnecessary energy consumption and reduced running costs.',
+                source: 'BCC Energy Audit'
+            },
+            {
+                category: 'On-site generation',
+                status: 'In progress',
+                impact: 'Medium impact',
+                energy: 'Electricity',
+                title: 'Install a rooftop solar PV array',
+                description: 'This action involves installing a rooftop solar PV array to generate renewable electricity on-site, reduce grid reliance, and lower carbon emissions.',
+                source: 'BCC Energy Audit'
+            },
+            {
+                category: 'Low carbon heating',
+                status: 'Not started',
+                impact: 'High impact',
+                energy: 'Gas',
+                title: 'Change heating to low carbon source',
+                description: 'This action promoted changing the heating system to a low carbon source, such as heat pumps, biomass boilers, or district heating, to cut emissions, improve efficiency, a...',
+                source: 'BCC Energy Audit'
+            },
+            {
+                category: 'Offsetting',
+                status: 'Not started',
+                impact: 'Medium impact',
+                energy: 'Energy',
+                title: 'Carbon compared',
+                description: 'Even after major emissions deductions, most organisations still have unavoidable emissions. Carbon offsetting allows you to take responsibility for these by supporting projects...',
+                source: 'io-Smart Actions'
+            }
+        ];
+
+        // Energy type configurations
+        const energyConfig = {
+            'Electricity': { icon: 'plug', color: '#8574E0' },
+            'Gas': { icon: 'flame', color: '#EF743E' },
+            'Water': { icon: 'droplet', color: '#3B82F6' },
+            'Energy': { icon: 'zap', color: '#34AC41' }
+        };
+
+        // Impact level configurations
+        const impactConfig = {
+            'Low impact': { bgClass: 'bg-red-100' },
+            'Medium impact': { bgClass: 'bg-yellow-100' },
+            'High impact': { bgClass: 'bg-green-100', bgStyle: 'background-color: #B9EEBE;' }
+        };
+
+        // Status configurations
+        const statusConfig = {
+            'Implemented': { bgClass: 'bg-lime-100', textStyle: 'color: #23762C;' },
+            'Not started': { bgClass: 'bg-gray-100', textClass: 'text-gray-700' },
+            'In progress': { bgClass: 'bg-sky-100', textClass: 'text-sky-700' }
+        };
+
+        // Create a single action card
+        function createActionCard(data) {
+            const energy = energyConfig[data.energy] || energyConfig['Energy'];
+            const impact = impactConfig[data.impact] || impactConfig['Medium impact'];
+            const status = statusConfig[data.status] || statusConfig['Not started'];
+
+            const statusStyle = status.textStyle ? `style="${status.textStyle}"` : '';
+            const statusTextClass = status.textClass || '';
+            const impactBgStyle = impact.bgStyle ? `style="${impact.bgStyle}"` : '';
+
+            return `
+                <div class="action-card bg-white p-5 rounded-2xl flex flex-col cursor-pointer" style="min-height: 236px;" 
+                    data-category="${data.category}" 
+                    data-status="${data.status}" 
+                    data-impact="${data.impact}" 
+                    data-energy="${data.energy}">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-medium text-zinc-700">${data.category}</span>
+                        <span class="px-2 py-1 ${status.bgClass} ${statusTextClass} text-xs font-medium rounded" ${statusStyle}>${data.status}</span>
+                    </div>
+                    <h4 class="text-base font-medium text-zinc-900 mb-2">${data.title}</h4>
+                    <p class="text-sm text-zinc-500 mb-4 line-clamp-3 flex-grow">${data.description}</p>
+                    <div class="flex items-center space-x-3 text-xs text-zinc-500 mt-auto">
+                        <span class="inline-flex items-center text-xs font-medium text-zinc-500">
+                            <span class="w-5 h-5 rounded-lg flex items-center justify-center mr-1.5" style="background-color: ${energy.color};">
+                                <i data-lucide="${energy.icon}" class="w-3 h-3" style="color: white;"></i>
+                            </span>
+                            ${data.energy}
+                        </span>
+                        <span class="text-xs font-medium text-zinc-400">·</span>
+                        <span class="inline-flex items-center text-xs font-medium text-zinc-500">
+                            <span class="w-5 h-5 rounded-full flex items-center justify-center mr-1 ${impact.bgClass}" ${impactBgStyle}>
+                                <i data-lucide="signal" class="w-2.5 h-2.5" style="color: #343330;"></i>
+                            </span>
+                            ${data.impact}
+                        </span>
+                        <span class="text-xs font-medium text-zinc-400">·</span>
+                        <span class="inline-flex items-center text-xs font-medium text-zinc-500">
+                            <img src="/assets/small-gray-logo.svg" alt="" class="mr-1" style="width: 15px; height: 12px;">
+                            ${data.source}
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render all action cards
+        function renderActionCards() {
+            const grid = document.getElementById('action-cards-grid');
+            grid.innerHTML = actionCardsData.map(card => createActionCard(card)).join('');
+            lucide.createIcons();
+            attachCardClickHandlers();
+        }
+
+        // Attach click handlers to cards
+        function attachCardClickHandlers() {
+            document.querySelectorAll('.action-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const title = card.querySelector('h4')?.textContent || '';
+                    const description = card.querySelector('.line-clamp-3')?.textContent || '';
+                    const status = card.dataset.status || 'Not started';
+                    const energy = card.dataset.energy || 'Electricity';
+                    const impact = card.dataset.impact || 'Medium impact';
+                    openActionPanel({ title, description, status, energy, impact });
+                });
+            });
+        }
+
+        // Initial render
+        renderActionCards();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Filter state
+        const activeFilters = {
+            category: null,
+            status: null,
+            impact: null,
+            energy: null,
+            shortlisted: false
+        };
+        
+        // Filter dropdown functionality
+        const filterBtns = ['category', 'status', 'impact', 'energy'];
+        
+        filterBtns.forEach(filter => {
+            const btn = document.getElementById(`${filter}-filter-btn`);
+            const dropdown = document.getElementById(`${filter}-dropdown`);
+            
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close other dropdowns
+                filterBtns.forEach(f => {
+                    if (f !== filter) {
+                        document.getElementById(`${f}-dropdown`).classList.add('hidden');
+                    }
+                });
+                dropdown.classList.toggle('hidden');
+            });
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            filterBtns.forEach(filter => {
+                document.getElementById(`${filter}-dropdown`).classList.add('hidden');
+            });
+        });
+        
+        // Filter option click handler
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const filter = option.dataset.filter;
+                const value = option.dataset.value;
+                const btn = document.getElementById(`${filter}-filter-btn`);
+                
+                // Toggle filter
+                if (activeFilters[filter] === value) {
+                    activeFilters[filter] = null;
+                    btn.classList.remove('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+                    btn.classList.add('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+                    btn.innerHTML = `${filter.charAt(0).toUpperCase() + filter.slice(1)}<i class="ph ph-caret-down ml-2 text-zinc-600"></i>`;
+                } else {
+                    activeFilters[filter] = value;
+                    btn.classList.remove('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+                    btn.classList.add('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+                    btn.innerHTML = `${value}<i class="ph ph-caret-down ml-2 text-white"></i>`;
+                }
+                
+                document.getElementById(`${filter}-dropdown`).classList.add('hidden');
+                applyFilters();
+                updateResetFiltersVisibility();
+            });
+        });
+        
+        // Shortlisted toggle
+        document.getElementById('shortlisted-filter-btn').addEventListener('click', () => {
+            const btn = document.getElementById('shortlisted-filter-btn');
+            activeFilters.shortlisted = !activeFilters.shortlisted;
+            
+            if (activeFilters.shortlisted) {
+                btn.classList.remove('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+                btn.classList.add('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+                btn.innerHTML = '<i class="ph ph-star-fill mr-2 text-white"></i>Shortlisted';
+            } else {
+                btn.classList.remove('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+                btn.classList.add('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+                btn.innerHTML = '<i class="ph ph-star mr-2 text-zinc-500"></i>Shortlist';
+            }
+            applyFilters();
+            updateResetFiltersVisibility();
+        });
+        
+        // Reset filters
+        document.getElementById('reset-filters-btn').addEventListener('click', () => {
+            activeFilters.category = null;
+            activeFilters.status = null;
+            activeFilters.impact = null;
+            activeFilters.energy = null;
+            activeFilters.shortlisted = false;
+            
+            // Reset all filter buttons
+            filterBtns.forEach(filter => {
+                const btn = document.getElementById(`${filter}-filter-btn`);
+                btn.classList.remove('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+                btn.classList.add('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+                btn.innerHTML = `${filter.charAt(0).toUpperCase() + filter.slice(1)}<i class="ph ph-caret-down ml-2 text-zinc-600"></i>`;
+            });
+            
+            const shortlistBtn = document.getElementById('shortlisted-filter-btn');
+            shortlistBtn.classList.remove('bg-zinc-900', 'border-zinc-900', 'text-white', 'hover:bg-zinc-800');
+            shortlistBtn.classList.add('bg-white', 'border-zinc-300', 'text-zinc-700', 'hover:bg-zinc-50');
+            shortlistBtn.innerHTML = '<i class="ph ph-star mr-2 text-zinc-500"></i>Shortlist';
+            
+            applyFilters();
+            updateResetFiltersVisibility();
+        });
+        
+        // Apply filters to cards
+        function applyFilters() {
+            const cards = document.querySelectorAll('.action-card');
+            
+            cards.forEach(card => {
+                let show = true;
+                
+                if (activeFilters.category && card.dataset.category !== activeFilters.category) {
+                    show = false;
+                }
+                if (activeFilters.status && card.dataset.status !== activeFilters.status) {
+                    show = false;
+                }
+                if (activeFilters.impact && card.dataset.impact !== activeFilters.impact) {
+                    show = false;
+                }
+                if (activeFilters.energy && card.dataset.energy !== activeFilters.energy) {
+                    show = false;
+                }
+                
+                card.style.display = show ? 'flex' : 'none';
+            });
+            
+            // Re-initialize Lucide icons
+            lucide.createIcons();
+        }
+        
+        // Company dropdown functionality
+        const companySelector = document.getElementById('company-selector');
+        const companyDropdown = document.getElementById('company-dropdown');
+        
+        companySelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            companyDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                companyDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Site item selection
+        const siteItems = document.querySelectorAll('.site-item');
+        siteItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Update checkmark visuals
+                siteItems.forEach(s => {
+                    const checkbox = s.querySelector('.site-checkbox');
+                    checkbox.classList.remove('active');
+                    checkbox.style.borderColor = '#D4D4D8';
+                    checkbox.style.backgroundColor = 'transparent';
+                    checkbox.innerHTML = '';
+                });
+                
+                const checkbox = item.querySelector('.site-checkbox');
+                checkbox.classList.add('active');
+                checkbox.style.borderColor = '#18181B';
+                checkbox.style.backgroundColor = '#18181B';
+                
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'ph ph-check text-white text-xs';
+                checkbox.appendChild(checkIcon);
+                
+                // Close dropdown
+                companyDropdown.classList.add('hidden');
+            });
+        });
+        
+        // Action Details Panel functionality
+        const actionPanel = document.getElementById('action-details-panel');
+        const actionPanelOverlay = document.getElementById('action-panel-overlay');
+        const actionPanelCloseBtn = document.getElementById('action-panel-close-btn');
+        
+        function openActionPanel(cardData) {
+            // Update panel content with card data
+            document.getElementById('panel-title').textContent = cardData.title || 'Action details';
+            document.getElementById('panel-description').textContent = cardData.description || '';
+            
+            // Update status tag
+            const statusTag = document.getElementById('panel-status-tag');
+            const status = cardData.status || 'Not started';
+            statusTag.textContent = status;
+            if (status === 'Implemented') {
+                statusTag.className = 'px-2 py-1 bg-lime-100 text-xs font-medium rounded';
+                statusTag.style.color = '#23762C';
+            } else if (status === 'In progress') {
+                statusTag.className = 'px-2 py-1 bg-sky-100 text-sky-700 text-xs font-medium rounded';
+                statusTag.style.color = '';
+            } else {
+                statusTag.className = 'px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded';
+                statusTag.style.color = '';
+            }
+            
+            // Update energy tag
+            const energyTag = document.getElementById('panel-energy-tag');
+            const energy = cardData.energy || 'Electricity';
+            const energyCfg = energyConfig[energy] || energyConfig['Electricity'];
+            energyTag.innerHTML = `
+                <span class="w-5 h-5 rounded-lg flex items-center justify-center mr-1.5" style="background-color: ${energyCfg.color};">
+                    <i data-lucide="${energyCfg.icon}" class="w-3 h-3" style="color: white;"></i>
+                </span>
+                ${energy}
+            `;
+            
+            // Update impact tag
+            const impactTag = document.getElementById('panel-impact-tag');
+            const impact = cardData.impact || 'Medium impact';
+            const impactCfg = impactConfig[impact] || impactConfig['Medium impact'];
+            const impactBgStyle = impactCfg.bgStyle || '';
+            impactTag.innerHTML = `
+                <span class="w-5 h-5 rounded-full flex items-center justify-center mr-1 ${impactCfg.bgClass}" ${impactBgStyle ? `style="${impactBgStyle}"` : ''}>
+                    <i data-lucide="signal" class="w-2.5 h-2.5" style="color: #343330;"></i>
+                </span>
+                ${impact}
+            `;
+            
+            // Show panel
+            actionPanel.classList.remove('translate-x-full');
+            actionPanelOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Re-initialize Lucide icons
+            lucide.createIcons();
+        }
+        
+        function closeActionPanel() {
+            actionPanel.classList.add('translate-x-full');
+            actionPanelOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                actionPanelOverlay.classList.add('hidden');
+                // Reset to details view
+                document.getElementById('action-details-view').classList.remove('hidden');
+                document.getElementById('update-action-view').classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+        
+        function showUpdateView() {
+            document.getElementById('action-details-view').classList.add('hidden');
+            document.getElementById('update-action-view').classList.remove('hidden');
+            lucide.createIcons();
+        }
+        
+        function showDetailsView() {
+            document.getElementById('update-action-view').classList.add('hidden');
+            document.getElementById('action-details-view').classList.remove('hidden');
+        }
+        
+        // Close panel events
+        actionPanelCloseBtn.addEventListener('click', closeActionPanel);
+        actionPanelOverlay.addEventListener('click', closeActionPanel);
+        
+        // Update panel close button
+        document.getElementById('update-panel-close-btn').addEventListener('click', closeActionPanel);
+        
+        // Take action button - switch to update view
+        document.getElementById('take-action-btn').addEventListener('click', showUpdateView);
+        
+        // Cancel button - go back to details view
+        document.getElementById('update-cancel-btn').addEventListener('click', showDetailsView);
+        
+        // Update button - submit and close
+        document.getElementById('update-submit-btn').addEventListener('click', () => {
+            // Here you would handle the form submission
+            closeActionPanel();
+        });
+        
+        // Status custom dropdown functionality
+        const statusDropdownBtn = document.getElementById('status-dropdown-btn');
+        const statusOptionsDropdown = document.getElementById('status-options-dropdown');
+        const statusHiddenInput = document.getElementById('update-status-select');
+        const statusSelectedTag = document.getElementById('status-selected-tag');
+        
+        statusDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            statusOptionsDropdown.classList.toggle('hidden');
+        });
+        
+        document.querySelectorAll('.status-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                statusHiddenInput.value = value;
+                
+                // Update the selected tag display
+                const tagSpan = option.querySelector('span').cloneNode(true);
+                statusSelectedTag.className = tagSpan.className;
+                statusSelectedTag.style.cssText = tagSpan.style.cssText;
+                statusSelectedTag.textContent = tagSpan.textContent;
+                
+                statusOptionsDropdown.classList.add('hidden');
+            });
+        });
+        
+        // Close status dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!statusDropdownBtn.contains(e.target) && !statusOptionsDropdown.contains(e.target)) {
+                statusOptionsDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Shortlist button toggle functionality
+        const panelShortlistBtn = document.getElementById('panel-shortlist-btn');
+        panelShortlistBtn.addEventListener('click', () => {
+            const isShortlisted = panelShortlistBtn.dataset.shortlisted === 'true';
+            const icon = document.getElementById('shortlist-icon');
+            const text = document.getElementById('shortlist-text');
+            
+            if (isShortlisted) {
+                // Deactivate
+                panelShortlistBtn.dataset.shortlisted = 'false';
+                icon.classList.remove('ph-star-fill');
+                icon.classList.add('ph-star', 'text-zinc-500');
+                icon.style.color = '';
+                text.textContent = 'Shortlist';
+            } else {
+                // Activate
+                panelShortlistBtn.dataset.shortlisted = 'true';
+                icon.classList.remove('ph-star', 'text-zinc-500');
+                icon.classList.add('ph-star-fill');
+                icon.style.color = '#3F3F46';
+                text.textContent = 'Shortlisted';
+            }
+        });
+        
+        // Function to update reset filters visibility
+        function updateResetFiltersVisibility() {
+            const resetBtn = document.getElementById('reset-filters-btn');
+            const hasActiveFilter = activeFilters.category || activeFilters.status || activeFilters.impact || activeFilters.energy || activeFilters.shortlisted;
+            
+            if (hasActiveFilter) {
+                resetBtn.classList.remove('hidden');
+            } else {
+                resetBtn.classList.add('hidden');
+            }
+        }
+        
+        // Calendar Picker functionality
+        const datePickerBtn = document.getElementById('date-picker-btn');
+        const calendarDropdown = document.getElementById('calendar-dropdown');
+        const calendarDays = document.getElementById('calendar-days');
+        const calendarMonthYear = document.getElementById('calendar-month-year');
+        const selectedDateDisplay = document.getElementById('selected-date-display');
+        const hiddenDateInput = document.getElementById('hidden-date-input');
+        
+        let currentCalendarDate = new Date(2026, 0, 29); // January 29, 2026
+        let selectedDate = new Date(2026, 0, 29);
+        
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        function formatDateDisplay(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+            
+            // Get first day of month and total days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            let html = '';
+            
+            // Empty cells for days before first day of month
+            for (let i = 0; i < firstDay; i++) {
+                html += '<span></span>';
+            }
+            
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isSelected = selectedDate.getDate() === day && 
+                                   selectedDate.getMonth() === month && 
+                                   selectedDate.getFullYear() === year;
+                const selectedClass = isSelected ? 'bg-zinc-900 text-white' : 'hover:bg-zinc-100 text-zinc-700';
+                html += `<button type="button" class="calendar-day w-8 h-8 text-sm rounded-lg ${selectedClass}" data-day="${day}">${day}</button>`;
+            }
+            
+            calendarDays.innerHTML = html;
+            
+            // Add click handlers to days
+            document.querySelectorAll('.calendar-day').forEach(dayBtn => {
+                dayBtn.addEventListener('click', () => {
+                    const day = parseInt(dayBtn.dataset.day);
+                    selectedDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), day);
+                    selectedDateDisplay.textContent = formatDateDisplay(selectedDate);
+                    hiddenDateInput.value = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+                    calendarDropdown.classList.add('hidden');
+                    renderCalendar();
+                });
+            });
+        }
+        
+        datePickerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarDropdown.classList.toggle('hidden');
+            renderCalendar();
+        });
+        
+        document.getElementById('prev-month-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar();
+        });
+        
+        document.getElementById('next-month-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar();
+        });
+        
+        // Close calendar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!calendarDropdown.contains(e.target) && !datePickerBtn.contains(e.target)) {
+                calendarDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeActionPanel();
+            }
+        });
+    </script>
+</body>
+</html>

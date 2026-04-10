@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .search-input::placeholder {
+            color: #A1A1AA;
+        }
+        .alarms-table-body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .alarms-table-body::-webkit-scrollbar {
+            display: none;
+        }
+        .alarm-panel-content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .alarm-panel-content::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-100  font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px; ">
+                            <i class="ph-gauge text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-chart-bar text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-check-circle text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);   ">
+                            <i class="ph ph-bell-simple-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Alarms</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                                <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                                <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                            </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="hidden absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4 border-b border-zinc-100">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                                <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-200">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div id="alarms-tabs" class="flex space-x-10 w-full mb-6" style="border-bottom: 1px solid #E4E4E7;">
+                <a href="/pages/alarms-page.html" class="alarms-tab active text-sm font-medium text-gray-900 border-b-2 border-gray-900 pb-2">Notifications</a>
+                <a href="/pages/alarm-settings-page.html" class="alarms-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent hover:text-gray-700">Settings</a>
+            </div>
+
+            <!-- Alarms Table Container -->
+            <div class="bg-white rounded-xl overflow-hidden" style="max-height: 796px;">
+                <!-- Filter Buttons and Search -->
+                <div class="flex justify-between items-center px-6 py-3">
+                    <div class="flex items-center space-x-3">
+                        <button id="filter-all" class="status-filter-btn active px-4 py-2 rounded-xl text-sm font-medium bg-zinc-900 text-white" data-status="all">
+                            All
+                        </button>
+                        <button id="filter-open" class="status-filter-btn px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white" data-status="Open">
+                            Open
+                        </button>
+                        <button id="filter-resolved" class="status-filter-btn px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white" data-status="Resolved">
+                            Resolved
+                        </button>
+                        <div class="relative">
+                            <button id="energy-filter-btn" class="energy-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                                <span id="energy-filter-text">Energy</span>
+                                <i class="ph-caret-down text-zinc-700"></i>
+                            </button>
+                            <div id="energy-dropdown" class="hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50 min-w-[160px]">
+                                <div class="p-2">
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="all">Energy</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Electricity">Electricity</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Gas">Gas</div>
+                                    <div class="energy-option px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 rounded-lg cursor-pointer" data-energy="Water">Water</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color: #A1A1AA;"></i>
+                        <input type="text" placeholder="Search" class="search-input pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200" style="background-color: #F5F5F4; color: #3F3F46; width: 256px;">
+                    </div>
+                </div>
+                <!-- Table Header -->
+                <div class="grid grid-cols-12 gap-4 px-6 py-4 text-sm font-medium text-zinc-500" style="background-color: #f0f0ef;">
+                    <div class="col-span-3 flex items-center space-x-1">
+                        <span>Alarm</span>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Date</span>
+                        <i data-lucide="chevrons-up-down" class="w-4 h-4 text-zinc-500"></i>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Meter</span>
+                        <i data-lucide="chevrons-up-down" class="w-4 h-4 text-zinc-500"></i>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Excess consumption</span>
+                        <i data-lucide="chevrons-up-down" class="w-4 h-4 text-zinc-500"></i>
+                    </div>
+                    <div class="col-span-2 flex items-center space-x-1">
+                        <span>Priority</span>
+                        <i data-lucide="chevrons-up-down" class="w-4 h-4 text-zinc-500"></i>
+                    </div>
+                    <div class="col-span-1">
+                        <span>Status</span>
+                    </div>
+                </div>
+
+                <!-- Table Rows -->
+                <div id="alarms-table-body" class="alarms-table-body overflow-y-auto" style="max-height: 620px;">
+                    <!-- Rows will be rendered dynamically -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between px-6 py-4 border-t border-zinc-100">
+                    <div class="text-sm text-zinc-500">Showing 1-10 of 264</div>
+                    <div class="flex items-center space-x-2">
+                        <button class="w-8 h-8 flex items-center justify-center bg-white text-zinc-400">
+                            <i class="ph ph-caret-left"></i>
+                        </button>
+                        <span class="text-sm text-zinc-700">Page 1</span>
+                        <button class="w-8 h-8 flex items-center justify-center bg-white text-zinc-700">
+                            <i class="ph ph-caret-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alarm Panel Overlay -->
+    <div id="alarm-panel-overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40"></div>
+    
+    <!-- Alarm Details Panel -->
+    <div id="alarm-details-panel" class="fixed top-0 right-0 h-full bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" style="width: 512px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: #E4E4E7;">
+            <h2 id="panel-alarm-id" class="text-base font-medium text-zinc-900">Alarm #859269</h2>
+            <button id="alarm-panel-close-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-zinc-100">
+                <i data-lucide="x" class="w-5 h-5 text-zinc-700"></i>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="flex-1 px-6 py-4 overflow-y-auto alarm-panel-content">
+            <!-- Meter and Status Row -->
+            <div class="flex items-center justify-between mb-3">
+                <span id="panel-meter-badge" class="inline-flex items-center text-xs text-zinc-500">
+                    <span class="w-5 h-5 rounded-lg flex items-center justify-center mr-1.5" style="background-color: #8574E0;">
+                        <i data-lucide="plug" class="w-3 h-3" style="color: white;"></i>
+                    </span>
+                    Electricity Main Meter
+                </span>
+                <span id="panel-status-tag" class="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded">Investigating</span>
+            </div>
+            
+            <!-- Title -->
+            <h3 id="panel-title" class="text-xl font-medium text-zinc-900 mb-2">Excess consumption</h3>
+            
+            <!-- Description -->
+            <p id="panel-description" class="text-sm text-zinc-500 mb-4">Consumption was more than 15% above last year for the readings highlighted.</p>
+            
+            <!-- Chart Placeholder -->
+            <div id="panel-chart-container" class="mb-4 rounded-lg" style="background-color: white;">
+                <div id="panel-chart" class="relative" style="height: 200px;">
+                    <!-- Y-axis labels -->
+                    <div class="absolute right-0 top-0 flex flex-col justify-between text-xs font-medium text-zinc-500" style="z-index: 10; height: 176px;">
+                        <span>160</span>
+                        <span>120</span>
+                        <span>80</span>
+                        <span>40</span>
+                        <span>kWh</span>
+                    </div>
+                    <!-- Chart area -->
+                    <div class="relative" style="height: 176px; margin-right: 32px;">
+                        <!-- Grid lines SVG -->
+                        <svg id="panel-chart-grid" class="absolute inset-0 w-full h-full" style="z-index: 1;" preserveAspectRatio="none">
+                            <!-- 8 Horizontal grid lines -->
+                            <line x1="0" y1="0%" x2="100%" y2="0%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="12.5%" x2="100%" y2="12.5%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="25%" x2="100%" y2="25%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="37.5%" x2="100%" y2="37.5%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="62.5%" x2="100%" y2="62.5%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="75%" x2="100%" y2="75%" stroke="#E5E7EB" stroke-width="1" />
+                            <line x1="0" y1="87.5%" x2="100%" y2="87.5%" stroke="#E5E7EB" stroke-width="1" />
+                            <!-- 13 Vertical dotted grid lines -->
+                            <line x1="0%" y1="0" x2="0%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="8.33%" y1="0" x2="8.33%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="16.66%" y1="0" x2="16.66%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="25%" y1="0" x2="25%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="33.33%" y1="0" x2="33.33%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="41.66%" y1="0" x2="41.66%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="58.33%" y1="0" x2="58.33%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="66.66%" y1="0" x2="66.66%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="75%" y1="0" x2="75%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="83.33%" y1="0" x2="83.33%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="91.66%" y1="0" x2="91.66%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                            <line x1="100%" y1="0" x2="100%" y2="100%" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4,4" />
+                        </svg>
+                        <!-- SVG Lines Container -->
+                        <svg id="panel-chart-lines" class="absolute inset-0 w-full h-full" style="z-index: 5;" preserveAspectRatio="none">
+                            <!-- Last year line (solid) -->
+                            <polyline id="last-year-line" fill="none" stroke="#18181B" stroke-width="2" />
+                            <!-- Threshold line (dashed) -->
+                            <polyline id="threshold-line" fill="none" stroke="#18181B" stroke-width="2" stroke-dasharray="6,4" />
+                        </svg>
+                        <!-- Chart bars -->
+                        <div id="panel-chart-bars" class="absolute inset-0 flex items-end justify-between px-1" style="z-index: 3;">
+                            <!-- 24 bars will be generated dynamically -->
+                        </div>
+                    </div>
+                    <!-- X-axis labels -->
+                    <div class="flex justify-between text-xs font-medium text-zinc-500 mt-2" style="margin-right: 32px;">
+                        <span>00:00</span>
+                        <span>12:00</span>
+                        <span>24:00</span>
+                    </div>
+                </div>
+                <!-- Legend -->
+                <div class="flex items-center justify-center space-x-6 mt-2">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-0.5 bg-zinc-900"></div>
+                        <span class="text-sm text-zinc-500">Last year</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-0.5" style="border-top: 2px dashed #18181B;"></div>
+                        <span class="text-sm text-zinc-500">Threshold</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Meter Details Section -->
+            <div class="mb-6">
+                <div class="rounded-lg bg-stone-50 px-3">
+                    <div class="flex items-center justify-between py-3 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-500">Meter description</span>
+                        <span id="panel-meter-desc" class="text-sm font-medium text-zinc-700">MPAN 1 - 6454b634</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-500">Meter type</span>
+                        <span id="panel-meter-type" class="text-sm font-medium text-zinc-700">Electricity</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3 border-b border-zinc-200">
+                        <span class="text-sm text-zinc-500">Alarm date</span>
+                        <span id="panel-alarm-date" class="text-sm font-medium text-zinc-700">13/12/2025</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-sm text-zinc-500">Excess consumption</span>
+                        <span id="panel-excess" class="text-sm font-medium text-zinc-700">56.6 kWh</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Section -->
+            <div class="bg-stone-100 mx-[-24px] border-b-2 border-zinc-200">
+                <div class="p-6">
+                    <h4 class="text-base font-medium text-zinc-900 mb-4">Activity</h4>
+                    <div id="panel-activity" class="rounded-lg space-y-4" style="background-color: #F5F5F4;">
+                        <!-- Activity items will be rendered dynamically -->
+                    </div>
+                </div> 
+            </div>
+            
+            <!-- Update Alarm Status Section -->
+            <div class="bg-stone-100 mx-[-24px] p-6 mb-[-24px]">
+                <label class="block text-sm font-medium text-zinc-900 mb-2">Update alarm status</label>
+                <div class="relative mb-4">
+                    <div id="panel-status-dropdown" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl cursor-pointer flex items-center justify-between bg-white">
+                        <span id="dropdown-status-tag" class="px-2 py-1 text-xs font-medium rounded"></span>
+                        <i class="ph ph-caret-down text-zinc-500"></i>
+                    </div>
+                    <div id="panel-status-options" class="hidden absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-lg border border-zinc-200 z-50 py-2">
+                        <div class="status-option px-4 py-2 hover:bg-zinc-50 cursor-pointer" data-status="New">
+                            <span class="px-2 py-1 text-xs font-medium rounded bg-indigo-100 text-indigo-800">New</span>
+                        </div>
+                        <div class="status-option px-4 py-2 hover:bg-zinc-50 cursor-pointer" data-status="Open">
+                            <span class="px-2 py-1 text-xs font-medium rounded bg-pink-100 text-pink-800">Open</span>
+                        </div>
+                        <div class="status-option px-4 py-2 hover:bg-zinc-50 cursor-pointer" data-status="Investigating">
+                            <span class="px-2 py-1 text-xs font-medium rounded bg-amber-100 text-amber-800">Investigating</span>
+                        </div>
+                        <div class="status-option px-4 py-2 hover:bg-zinc-50 cursor-pointer" data-status="Resolved">
+                            <span class="px-2 py-1 text-xs font-medium rounded" style="background-color: #d5f6d8; color: #22622a;">Resolved</span>
+                        </div>
+                    </div>
+                </div>
+                <label class="block text-sm font-medium text-zinc-900 mb-2">Note</label>
+                <textarea id="panel-note" class="w-full px-4 py-3 text-sm border border-zinc-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-zinc-200" rows="3" placeholder="Add a note about this status update."></textarea>
+                <button id="panel-update-btn" class="mt-4 px-4 py-2.5 bg-zinc-900 text-white text-sm font-medium rounded-xl hover:bg-zinc-800 transition-colors">Update</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Alarm Data - Add/edit your alarms here
+        const alarmsData = [
+            {
+                id: '859274',
+                title: 'Excess consumption',
+                date: '31/08/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Electricity',
+                excess: '250.2 kWh',
+                priority: 'High',
+                status: 'New',
+                energy: 'Electricity',
+                description: 'Consumption was more than 15% above last year for the readings highlighted.',
+                activity: [
+                    { type: 'status', text: "Alarm detected", date: '31/08/2025' }
+                ]
+            },
+            {
+                id: '859273',
+                title: 'Base load exceeded',
+                date: '12/07/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Gas',
+                excess: '130.7 kWh',
+                priority: 'High',
+                status: 'New',
+                energy: 'Gas',
+                description: 'Base load exceeded normal thresholds during off-peak hours.',
+                activity: [
+                    { type: 'status', text: "Alarm detected", date: '12/07/2025' }
+                ]
+            },
+            {
+                id: '859272',
+                title: 'Missing data',
+                date: '29/06/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Electricity',
+                excess: '98.4 kWh',
+                priority: 'High',
+                status: 'New',
+                energy: 'Electricity',
+                description: 'Data gaps detected in meter readings during the monitoring period.',
+                activity: [
+                    { type: 'status', text: "Alarm detected", date: '29/06/2025' }
+                ]
+            },
+            {
+                id: '859271',
+                title: 'Missing data',
+                date: '17/05/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Electricity',
+                excess: '276.9 kWh',
+                priority: 'High',
+                status: 'Open',
+                energy: 'Electricity',
+                description: 'Data gaps detected in meter readings during the monitoring period.',
+                activity: [
+                    { type: 'status', text: "Alarm status changed to 'Open'", date: '18/05/2025' },
+                    { type: 'status', text: "Alarm detected", date: '17/05/2025' }
+                ]
+            },
+            {
+                id: '859270',
+                title: 'Missing data',
+                date: '03/04/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Gas',
+                excess: '123.1 kWh',
+                priority: 'Medium',
+                status: 'Resolved',
+                energy: 'Gas',
+                description: 'Data gaps were detected but have been resolved.',
+                activity: [
+                    { type: 'status', text: "Alarm resolved", date: '10/04/2025' },
+                    { type: 'status', text: "Alarm detected", date: '03/04/2025' }
+                ]
+            },
+            {
+                id: '859269',
+                title: 'Excess consumption',
+                date: '08/03/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Electricity',
+                excess: '56.6 kWh',
+                priority: 'High',
+                status: 'Investigating',
+                energy: 'Electricity',
+                description: 'Consumption was more than 15% above last year for the readings highlighted.',
+                activity: [
+                    { type: 'status', text: "Alarm status changed to 'Investigating'", date: '15/03/2025', note: 'Optional note about this status update.' },
+                    { type: 'mute', text: "Alarm muted for 7 days", date: '15/03/2025' },
+                    { type: 'status', text: "Alarm detected", date: '08/03/2025' }
+                ]
+            },
+            {
+                id: '859268',
+                title: 'Missing data',
+                date: '25/02/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Gas',
+                excess: '187.5 kWh',
+                priority: 'Medium',
+                status: 'Resolved',
+                energy: 'Gas',
+                description: 'Data gaps were detected but have been resolved.',
+                activity: [
+                    { type: 'status', text: "Alarm resolved", date: '05/03/2025' },
+                    { type: 'status', text: "Alarm detected", date: '25/02/2025' }
+                ]
+            },
+            {
+                id: '859267',
+                title: 'Closed hours',
+                date: '19/02/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 2 - 7894c521',
+                meterType: 'Water',
+                excess: '210.3 kWh',
+                priority: 'Medium',
+                status: 'Investigating',
+                energy: 'Water',
+                description: 'Unusual consumption detected during closed business hours.',
+                activity: [
+                    { type: 'status', text: "Alarm status changed to 'Investigating'", date: '22/02/2025' },
+                    { type: 'status', text: "Alarm detected", date: '19/02/2025' }
+                ]
+            },
+            {
+                id: '859266',
+                title: 'Missing data',
+                date: '23/01/2025',
+                meter: 'Main building',
+                meterDesc: 'Solar Panel Array',
+                meterType: 'Solar',
+                excess: '78.8 kWh',
+                priority: 'High',
+                status: 'Investigating',
+                energy: 'Solar',
+                description: 'Data gaps detected in solar panel meter readings.',
+                activity: [
+                    { type: 'status', text: "Alarm status changed to 'Investigating'", date: '25/01/2025' },
+                    { type: 'status', text: "Alarm detected", date: '23/01/2025' }
+                ]
+            },
+            {
+                id: '859265',
+                title: 'Excess consumption',
+                date: '02/01/2025',
+                meter: 'Main building',
+                meterDesc: 'MPAN 1 - 6454b634',
+                meterType: 'Electricity',
+                excess: '145.0 kWh',
+                priority: 'Low',
+                status: 'Resolved',
+                energy: 'Electricity',
+                description: 'Minor excess consumption detected and resolved.',
+                activity: [
+                    { type: 'status', text: "Alarm resolved", date: '08/01/2025' },
+                    { type: 'status', text: "Alarm detected", date: '02/01/2025' }
+                ]
+            }
+        ];
+
+        // Energy type configurations
+        const energyConfig = {
+            'Electricity': { icon: 'plug', color: '#8574E0', darkColor: '#463877' },
+            'Gas': { icon: 'flame', color: '#EF743E', darkColor: '#782617' },
+            'Water': { icon: 'droplet', color: '#0EA5E9', darkColor: '#075985' },
+            'Solar': { icon: 'sun', color: '#DDAC15', darkColor: '#986010' }
+        };
+
+        // Priority configurations
+        const priorityConfig = {
+            'High': { bgColor: '#B9EEBE' },
+            'Medium': { bgColor: '#F7EB91' },
+            'Low': { bgColor: '#FBDAC1' }
+        };
+
+        // Status configurations
+        const statusConfig = {
+            'New': { bgClass: 'bg-indigo-100', textClass: 'text-indigo-800' },
+            'Open': { bgClass: 'bg-pink-100', textClass: 'text-pink-800' },
+            'Resolved': { bgStyle: 'background-color: #d5f6d8;', textStyle: 'color: #22622a;' },
+            'Investigating': { bgClass: 'bg-amber-100', textClass: 'text-amber-800' }
+        };
+
+        // Create a single alarm row
+        function createAlarmRow(data, isLast = false) {
+            const energy = energyConfig[data.energy] || energyConfig['Electricity'];
+            const priority = priorityConfig[data.priority] || priorityConfig['Medium'];
+            const status = statusConfig[data.status] || statusConfig['New'];
+
+            const statusBgClass = status.bgClass || '';
+            const statusTextClass = status.textClass || '';
+            const statusBgStyle = status.bgStyle || '';
+            const statusTextStyle = status.textStyle || '';
+
+            const borderClass = isLast ? '' : 'border-b border-zinc-100';
+
+            return `
+                <div class="alarm-row grid grid-cols-12 gap-4 px-6 ${borderClass} items-center hover:bg-zinc-50 cursor-pointer" style="min-height: 62px;" data-alarm-id="${data.id}">
+                    <div class="col-span-3 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: ${energy.color};">
+                            <i data-lucide="${energy.icon}" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-zinc-900">${data.title}</div>
+                            <div class="text-xs text-zinc-500">#${data.id}</div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 text-sm text-zinc-700">${data.date}</div>
+                    <div class="col-span-2 text-sm text-zinc-700">${data.meter}</div>
+                    <div class="col-span-2 text-sm text-zinc-700">${data.excess}</div>
+                    <div class="col-span-2">
+                        <span class="inline-flex items-center space-x-1.5 px-2 py-1 rounded-full text-xs font-medium">
+                            <span class="w-5 h-5 rounded-full flex items-center justify-center" style="background-color: ${priority.bgColor};">
+                                <i data-lucide="signal" class="w-2.5 h-2.5" style="color: #343330;"></i>
+                            </span>
+                            <span style="color: #343330;">${data.priority}</span>
+                        </span>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="px-2 py-1 text-xs font-medium rounded ${statusBgClass} ${statusTextClass}" ${statusBgStyle ? `style="${statusBgStyle} ${statusTextStyle}"` : (statusTextStyle ? `style="${statusTextStyle}"` : '')}>${data.status}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render all alarm rows
+        function renderAlarmRows() {
+            const tableBody = document.getElementById('alarms-table-body');
+            tableBody.innerHTML = alarmsData.map((alarm, index) => 
+                createAlarmRow(alarm, index === alarmsData.length - 1)
+            ).join('');
+            lucide.createIcons();
+            attachRowClickHandlers();
+        }
+
+        // Attach click handlers to rows
+        function attachRowClickHandlers() {
+            document.querySelectorAll('.alarm-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    const alarmId = row.dataset.alarmId;
+                    const alarm = alarmsData.find(a => a.id === alarmId);
+                    if (alarm) {
+                        openAlarmPanel(alarm);
+                    }
+                });
+            });
+        }
+
+        // Render activity items
+        function renderActivity(activities) {
+            return activities.map(activity => `
+                <div class="flex items-start space-x-3">
+                    <div class="flex flex-col items-center">
+                        <div class="w-px h-full bg-zinc-200 mt-1"></div>
+                    </div>
+                    <div class="flex-1 pb-4">
+                        <div class="flex items-center flex-wrap">
+                            <span class="text-sm font-medium text-zinc-900">${activity.text}</span>
+                            <span class="text-xs text-zinc-400 mx-2">·</span>
+                            <span class="text-xs text-zinc-400">${activity.date}</span>
+                        </div>
+                        ${activity.note ? `<p class="text-xs text-zinc-500 mt-1"><span class="text-zinc-400">Note:</span> ${activity.note}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render 24 chart bars with dynamic colors based on energy type
+        function renderChartBars(energyType, alarmTitle) {
+            const energy = energyConfig[energyType] || energyConfig['Electricity'];
+            const barColor = energy.color;
+            const darkColor = energy.darkColor;
+            const chartBarsContainer = document.getElementById('panel-chart-bars');
+            const chartContainer = document.getElementById('panel-chart-container');
+            
+            // Hide chart for base load and missing data alarms
+            if (alarmTitle && (alarmTitle.toLowerCase().includes('base load') || alarmTitle.toLowerCase().includes('missing data'))) {
+                chartContainer.style.display = 'none';
+                return;
+            } else {
+                chartContainer.style.display = 'block';
+            }
+            
+            // Sample data for 24 hours (values out of max 160)
+            const barData = [
+                95, 100, 90, 88, 85, 85, 88, 90, 85, 82, 80, 78,
+                75, 78, 80, 85, 88, 92, 95, 90, 88, 85, 90, 85
+            ];
+            
+            // Last year line data (solid line)
+            const lastYearData = [
+                95, 98, 100, 95, 92, 88, 85, 90, 88, 85, 82, 78,
+                75, 72, 75, 80, 85, 92, 98, 95, 90, 88, 95, 90
+            ];
+            
+            // Threshold line data (dashed line, higher)
+            const thresholdData = [
+                115, 118, 120, 115, 112, 110, 108, 112, 110, 108, 105, 102,
+                100, 98, 100, 105, 110, 115, 118, 115, 112, 110, 115, 112
+            ];
+            
+            let barsHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const height = (barData[i] / 160) * 100;
+                // Use darker color if bar exceeds the last year value
+                const useColor = barData[i] > lastYearData[i] ? darkColor : barColor;
+                barsHTML += `<div style="width: 12px; height: ${height}%; background-color: ${useColor}; border-radius: 2px 2px 0 0;"></div>`;
+            }
+            
+            chartBarsContainer.innerHTML = barsHTML;
+            
+            // Draw SVG lines after bars are rendered
+            setTimeout(() => {
+                const chartArea = chartBarsContainer.parentElement;
+                const chartHeight = chartArea.offsetHeight;
+                const chartWidth = chartArea.offsetWidth;
+                
+                // Bar positioning constants (must match CSS: px-1 = 4px, bar width = 12px)
+                const barWidth = 12;
+                const padding = 4;
+                const halfBar = barWidth / 2;
+                
+                // Calculate points for last year line (solid) - centered on each bar
+                let lastYearPoints = '';
+                for (let i = 0; i < 24; i++) {
+                    // Position at center of each bar
+                    const x = padding + halfBar + (i / 23) * (chartWidth - 2 * padding - barWidth);
+                    const y = chartHeight - ((lastYearData[i] / 160) * chartHeight);
+                    lastYearPoints += `${x},${y} `;
+                }
+                document.getElementById('last-year-line').setAttribute('points', lastYearPoints.trim());
+                
+                // Calculate points for threshold line (dashed) - centered on each bar
+                let thresholdPoints = '';
+                for (let i = 0; i < 24; i++) {
+                    // Position at center of each bar
+                    const x = padding + halfBar + (i / 23) * (chartWidth - 2 * padding - barWidth);
+                    const y = chartHeight - ((thresholdData[i] / 160) * chartHeight);
+                    thresholdPoints += `${x},${y} `;
+                }
+                document.getElementById('threshold-line').setAttribute('points', thresholdPoints.trim());
+            }, 50);
+        }
+
+        // Alarm Details Panel functionality
+        const alarmPanel = document.getElementById('alarm-details-panel');
+        const alarmPanelOverlay = document.getElementById('alarm-panel-overlay');
+        const alarmPanelCloseBtn = document.getElementById('alarm-panel-close-btn');
+
+        function openAlarmPanel(alarm) {
+            const energy = energyConfig[alarm.energy] || energyConfig['Electricity'];
+            const status = statusConfig[alarm.status] || statusConfig['New'];
+
+            // Update panel content
+            document.getElementById('panel-alarm-id').textContent = `Alarm #${alarm.id}`;
+            document.getElementById('panel-title').textContent = alarm.title;
+            document.getElementById('panel-description').textContent = alarm.description;
+            
+            // Update meter badge
+            const meterBadge = document.getElementById('panel-meter-badge');
+            meterBadge.innerHTML = `
+                <span class="w-5 h-5 rounded-lg flex items-center justify-center mr-1.5" style="background-color: ${energy.color};">
+                    <i data-lucide="${energy.icon}" class="w-3 h-3" style="color: white;"></i>
+                </span>
+                ${alarm.meterType} Main Meter
+            `;
+
+            // Update status tag in header
+            const headerStatusTag = document.querySelector('#alarm-details-panel .flex-shrink-0 #panel-status-tag') || document.querySelectorAll('#panel-status-tag')[0];
+            
+            // Update meter details
+            document.getElementById('panel-meter-desc').textContent = alarm.meterDesc;
+            document.getElementById('panel-meter-type').textContent = alarm.meterType;
+            document.getElementById('panel-alarm-date').textContent = alarm.date;
+            document.getElementById('panel-excess').textContent = alarm.excess;
+
+            // Update activity
+            document.getElementById('panel-activity').innerHTML = renderActivity(alarm.activity);
+
+            // Render chart bars with energy-specific color (hide for base load and missing data)
+            renderChartBars(alarm.energy, alarm.title);
+
+            // Update status dropdown tag to match current alarm status
+            updateStatusDropdownTag(alarm.status);
+            document.getElementById('panel-note').value = '';
+
+            // Show panel
+            alarmPanel.classList.remove('translate-x-full');
+            alarmPanelOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Re-initialize Lucide icons
+            lucide.createIcons();
+        }
+
+        // Update status dropdown tag appearance
+        function updateStatusDropdownTag(statusValue) {
+            const statusTag = document.getElementById('dropdown-status-tag');
+            const status = statusConfig[statusValue] || statusConfig['New'];
+            const statusBgClass = status.bgClass || '';
+            const statusTextClass = status.textClass || '';
+            const statusBgStyle = status.bgStyle || '';
+            const statusTextStyle = status.textStyle || '';
+            statusTag.className = `px-2 py-1 text-xs font-medium rounded ${statusBgClass} ${statusTextClass}`;
+            if (statusBgStyle || statusTextStyle) {
+                statusTag.setAttribute('style', `${statusBgStyle} ${statusTextStyle}`);
+            } else {
+                statusTag.removeAttribute('style');
+            }
+            statusTag.textContent = statusValue;
+        }
+
+        // Status dropdown functionality
+        const statusDropdown = document.getElementById('panel-status-dropdown');
+        const statusOptions = document.getElementById('panel-status-options');
+
+        statusDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            statusOptions.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.status-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const statusValue = option.dataset.status;
+                updateStatusDropdownTag(statusValue);
+                statusOptions.classList.add('hidden');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!statusDropdown.contains(e.target) && !statusOptions.contains(e.target)) {
+                statusOptions.classList.add('hidden');
+            }
+        });
+
+        function closeAlarmPanel() {
+            alarmPanel.classList.add('translate-x-full');
+            setTimeout(() => {
+                alarmPanelOverlay.classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        // Close panel events
+        alarmPanelCloseBtn.addEventListener('click', closeAlarmPanel);
+        alarmPanelOverlay.addEventListener('click', closeAlarmPanel);
+
+        // Initial render
+        renderAlarmRows();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Company dropdown functionality
+        const companySelector = document.getElementById('company-selector');
+        const companyDropdown = document.getElementById('company-dropdown');
+        
+        companySelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            companyDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                companyDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Site item selection
+        const siteItems = document.querySelectorAll('.site-item');
+        siteItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Update checkmark visuals
+                siteItems.forEach(s => {
+                    const checkbox = s.querySelector('.site-checkbox');
+                    checkbox.classList.remove('active');
+                    checkbox.style.borderColor = '#D4D4D8';
+                    checkbox.style.backgroundColor = 'transparent';
+                    checkbox.innerHTML = '';
+                });
+                
+                const checkbox = item.querySelector('.site-checkbox');
+                checkbox.classList.add('active');
+                checkbox.style.borderColor = '#18181B';
+                checkbox.style.backgroundColor = '#18181B';
+                
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'ph ph-check text-white text-xs';
+                checkbox.appendChild(checkIcon);
+                
+                // Close dropdown
+                companyDropdown.classList.add('hidden');
+            });
+        });
+
+        // Filter state
+        const activeFilters = {
+            status: 'all',
+            energy: 'all'
+        };
+
+        // Apply filters and render filtered rows
+        function applyFilters() {
+            let filteredData = alarmsData;
+
+            // Apply status filter
+            if (activeFilters.status !== 'all') {
+                filteredData = filteredData.filter(alarm => alarm.status === activeFilters.status);
+            }
+
+            // Apply energy filter
+            if (activeFilters.energy !== 'all') {
+                filteredData = filteredData.filter(alarm => alarm.energy === activeFilters.energy);
+            }
+
+            // Render filtered rows
+            const tableBody = document.getElementById('alarms-table-body');
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<div class="px-6 py-8 text-center text-zinc-500">No alarms match the selected filters.</div>';
+            } else {
+                tableBody.innerHTML = filteredData.map((alarm, index) => 
+                    createAlarmRow(alarm, index === filteredData.length - 1)
+                ).join('');
+            }
+            lucide.createIcons();
+            attachRowClickHandlers();
+        }
+
+        // Status filter button toggle
+        const statusFilterBtns = document.querySelectorAll('.status-filter-btn');
+        statusFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                statusFilterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-zinc-900', 'text-white');
+                    b.classList.add('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                });
+                btn.classList.add('active', 'bg-zinc-900', 'text-white');
+                btn.classList.remove('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                
+                activeFilters.status = btn.dataset.status;
+                applyFilters();
+            });
+        });
+
+        // Energy filter dropdown
+        const energyFilterBtn = document.getElementById('energy-filter-btn');
+        const energyDropdown = document.getElementById('energy-dropdown');
+        const energyFilterText = document.getElementById('energy-filter-text');
+
+        energyFilterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            energyDropdown.classList.toggle('hidden');
+        });
+
+        // Energy option selection
+        document.querySelectorAll('.energy-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const energy = option.dataset.energy;
+                activeFilters.energy = energy;
+
+                // Update button text and style
+                if (energy === 'all') {
+                    energyFilterText.textContent = 'Energy';
+                    energyFilterBtn.classList.remove('bg-zinc-900', 'text-white');
+                    energyFilterBtn.classList.add('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                } else {
+                    energyFilterText.textContent = energy;
+                    energyFilterBtn.classList.remove('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                    energyFilterBtn.classList.add('bg-zinc-900', 'text-white');
+                }
+
+                energyDropdown.classList.add('hidden');
+                applyFilters();
+            });
+        });
+
+        // Close energy dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!energyDropdown.contains(e.target) && !energyFilterBtn.contains(e.target)) {
+                energyDropdown.classList.add('hidden');
+            }
+        });
+
+        // Tab switching - allow navigation to different pages
+        const tabs = document.querySelectorAll('.alarms-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const href = tab.getAttribute('href');
+                // Allow navigation if it's a different page
+                if (href && !href.includes('alarms-page.html')) {
+                    return; // Let the default link behavior happen
+                }
+                e.preventDefault();
+                tabs.forEach(t => {
+                    t.classList.remove('active', 'text-gray-900', 'border-gray-900');
+                    t.classList.add('text-gray-500', 'border-transparent');
+                });
+                tab.classList.add('active', 'text-gray-900', 'border-gray-900');
+                tab.classList.remove('text-gray-500', 'border-transparent');
+            });
+        });
+    </script>
+</body>
+</html>

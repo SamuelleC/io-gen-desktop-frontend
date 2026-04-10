@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);">
+                            <i class="ph-gauge-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-chart-bar text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-check-circle text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-bell-simple text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Dashboard Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Dashboard</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                                <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                                <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                            </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="hidden absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4 border-b border-zinc-100">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                                <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 text-sm border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-200">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabs-->
+            <div id="dashboard-tabs" class="flex space-x-10 w-full mb-6" style="border-bottom: 1px solid #E4E4E7;">
+                <a href="/pages/index.html" class="dashboard-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent hover:text-gray-700">Performance</a>
+                <a href="/pages/benchmark-page.html" class="dashboard-tab active text-sm font-medium text-gray-900 pb-2 border-b-2 border-gray-900">Benchmark</a>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex justify-between items-center mb-6">
+                <div id="metric-filters" class="flex items-center space-x-3">
+                    <div id="benchmark-type-toggle" class="flex items-center rounded-xl bg-neutral-200">
+                        <button class="benchmark-type-btn active px-4 py-2 text-sm rounded-xl font-medium" data-type="cibse" style="color: #3F3F46; background-color: #FFFFFF; border: 1px solid #E4E4E7;">CIBSE</button>
+                        <button class="benchmark-type-btn px-4 py-2 text-sm text-zinc-500 font-medium rounded-xl" data-type="own">Own Sites</button>
+                    </div>
+                    <button class="metric-filter-btn active flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white">
+                        <i class="ph-chart-line-up"></i>
+                        <span>kWh</span>
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph ph-currency-gbp"></i>
+                        <span>Cost</span>
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph-tree"></i>
+                        <span>tCO²e</span>
+                    </button>
+                    <button class="time-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <span>Current year</span>
+                        <i class="ph-caret-down text-zinc-700"></i>
+                    </button>
+                </div>
+                <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 bg-zinc-900">
+                    <i class="ph-download-simple" style="color: #ffffff;"></i>
+                    <span class="text-white">Export</span>
+                </button>
+            </div>
+
+            <!-- Benchmark Cards Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Energy Card -->
+                <div class="bg-white rounded-xl p-6" data-card="energy" style="height: auto; min-height: 300px;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6 pb-6" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #34AC41;">
+                                <i data-lucide="zap" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-medium text-zinc-900">Energy</div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <button class="sort-toggle hidden items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-200 bg-white hover:bg-zinc-50" data-sort="best">
+                            <span class="sort-icon">⇅</span>
+                            <span class="sort-text">Best</span>
+                        </button>
+                    </div>
+                    
+                    <!-- CIBSE Benchmark Bars -->
+                    <div class="cibse-view space-y-3">
+                        <!-- Best -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Best</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.70</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #86DF8F; width: 42%;"></div>
+                            </div>
+                        </div>
+                        <!-- Good -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Good</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">4.06</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #86DF8F; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <!-- This site -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-bold text-zinc-900">This site</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.92</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #34AC41; width: 47%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Own Sites View (hidden by default) -->
+                    <div class="own-sites-view hidden space-y-2"></div>
+                </div>
+
+                <!-- Electricity Card -->
+                <div class="bg-white rounded-xl p-6" data-card="electricity" style="height: auto; min-height: 300px;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6 pb-6" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #8574E0;">
+                                <i data-lucide="plug" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-medium text-zinc-900">Electricity</div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <button class="sort-toggle hidden items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-200 bg-white hover:bg-zinc-50" data-sort="best">
+                            <span class="sort-icon">⇅</span>
+                            <span class="sort-text">Best</span>
+                        </button>
+                    </div>
+                    
+                    <!-- CIBSE Benchmark Bars -->
+                    <div class="cibse-view space-y-3">
+                        <!-- Best -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Best</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.70</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #B1B0F1; width: 42%;"></div>
+                            </div>
+                        </div>
+                        <!-- Good -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Good</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">4.06</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #B1B0F1; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <!-- This site -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-bold text-zinc-900">This site</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">4.35</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #8574E0; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Own Sites View (hidden by default) -->
+                    <div class="own-sites-view hidden space-y-2"></div>
+                </div>
+
+                <!-- Gas Card -->
+                <div class="bg-white rounded-xl p-6" data-card="gas" style="height: auto; min-height: 300px;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6 pb-6" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #EF743E;">
+                                <i data-lucide="flame" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-medium text-zinc-900">Gas</div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <button class="sort-toggle hidden items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-200 bg-white hover:bg-zinc-50" data-sort="best">
+                            <span class="sort-icon">⇅</span>
+                            <span class="sort-text">Best</span>
+                        </button>
+                    </div>
+                    
+                    <!-- CIBSE Benchmark Bars -->
+                    <div class="cibse-view space-y-3">
+                        <!-- Best -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Best</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.70</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #F8BE96; width: 42%;"></div>
+                            </div>
+                        </div>
+                        <!-- Good -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Good</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">4.06</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #F8BE96; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <!-- This site -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-bold text-zinc-900">This site</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.92</span> <span class="text-xs font-medium text-zinc-700">kWh/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #EF743E; width: 47%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Own Sites View (hidden by default) -->
+                    <div class="own-sites-view hidden space-y-2"></div>
+                </div>
+
+                <!-- Water Card -->
+                <div class="bg-white rounded-xl p-6" data-card="water" style="height: auto; min-height: 300px;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6 pb-6" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #0EA5E9;">
+                                <i data-lucide="waves" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg font-medium text-zinc-900">Water</div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <button class="sort-toggle hidden items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-zinc-200 bg-white hover:bg-zinc-50" data-sort="best">
+                            <span class="sort-icon">⇅</span>
+                            <span class="sort-text">Best</span>
+                        </button>
+                    </div>
+                    
+                    <!-- CIBSE Benchmark Bars -->
+                    <div class="cibse-view space-y-3">
+                        <!-- Best -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Best</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">0.07</span> <span class="text-xs font-medium text-zinc-700">m³/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #7DD3FC; width: 7%;"></div>
+                            </div>
+                        </div>
+                        <!-- Good -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-zinc-500">Good</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">1.00</span> <span class="text-xs font-medium text-zinc-700">m³/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #7DD3FC; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <!-- This site -->
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-bold text-zinc-900">This site</span>
+                                <span><span class="text-sm font-semibold text-zinc-700">0.03</span> <span class="text-xs font-medium text-zinc-700">m³/m²</span></span>
+                            </div>
+                            <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                                <div class="h-5 rounded" style="background-color: #0EA5E9; width: 3%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Own Sites View (hidden by default) -->
+                    <div class="own-sites-view hidden space-y-2"></div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Company dropdown functionality
+        const companySelector = document.getElementById('company-selector');
+        const companyDropdown = document.getElementById('company-dropdown');
+        
+        companySelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            companyDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                companyDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Site item selection
+        const siteItems = document.querySelectorAll('.site-item');
+        siteItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Update checkmark visuals
+                siteItems.forEach(s => {
+                    const checkbox = s.querySelector('.site-checkbox');
+                    checkbox.classList.remove('active');
+                    checkbox.style.borderColor = '#D4D4D8';
+                    checkbox.style.backgroundColor = 'transparent';
+                    checkbox.innerHTML = '';
+                });
+                
+                const checkbox = item.querySelector('.site-checkbox');
+                checkbox.classList.add('active');
+                checkbox.style.borderColor = '#18181B';
+                checkbox.style.backgroundColor = '#18181B';
+                
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'ph ph-check text-white text-xs';
+                checkbox.appendChild(checkIcon);
+                
+                // Close dropdown
+                companyDropdown.classList.add('hidden');
+            });
+        });
+        
+        // Site data for Own Sites view
+        const sitesData = {
+            energy: [
+                { name: 'Riviere Sands', value: 11.42, unit: 'kWh/m²' },
+                { name: 'Cala Gran', value: 8.58, unit: 'kWh/m²' },
+                { name: 'Marton Mere', value: 8.22, unit: 'kWh/m²' },
+                { name: 'Rockley Park', value: 7.91, unit: 'kWh/m²' },
+                { name: 'Berwick', value: 7.45, unit: 'kWh/m²' },
+                { name: 'Thornwick Bay', value: 7.15, unit: 'kWh/m²' },
+                { name: 'Quay West', value: 7.14, unit: 'kWh/m²' },
+                { name: 'Primrose Valley', value: 6.91, unit: 'kWh/m²' },
+                { name: 'Church Farm', value: 6.78, unit: 'kWh/m²' },
+                { name: 'Craig Tara', value: 6.71, unit: 'kWh/m²' }
+            ],
+            electricity: [
+                { name: 'Berwick', value: 0.73, unit: 'kWh/m²' },
+                { name: 'Rockley Park', value: 0.85, unit: 'kWh/m²' },
+                { name: 'Burnham-on-Sea', value: 0.90, unit: 'kWh/m²' },
+                { name: 'Combe Haven', value: 1.17, unit: 'kWh/m²' },
+                { name: 'Kiln Park', value: 3.15, unit: 'kWh/m²' },
+                { name: 'Church Farm', value: 3.34, unit: 'kWh/m²' },
+                { name: 'Cala Gran', value: 3.72, unit: 'kWh/m²' },
+                { name: 'Weymouth Bay', value: 3.99, unit: 'kWh/m²' },
+                { name: 'Craig Tara', value: 4.05, unit: 'kWh/m²' },
+                { name: 'Hopton', value: 4.65, unit: 'kWh/m²' }
+            ],
+            gas: [
+                { name: 'Berwick', value: 0.52, unit: 'kWh/m²' },
+                { name: 'Rockley Park', value: 0.78, unit: 'kWh/m²' },
+                { name: 'Burnham-on-Sea', value: 0.95, unit: 'kWh/m²' },
+                { name: 'Combe Haven', value: 1.12, unit: 'kWh/m²' },
+                { name: 'Kiln Park', value: 1.45, unit: 'kWh/m²' },
+                { name: 'Church Farm', value: 1.67, unit: 'kWh/m²' },
+                { name: 'Cala Gran', value: 1.89, unit: 'kWh/m²' },
+                { name: 'Weymouth Bay', value: 2.12, unit: 'kWh/m²' },
+                { name: 'Craig Tara', value: 2.34, unit: 'kWh/m²' },
+                { name: 'Hopton', value: 2.56, unit: 'kWh/m²' }
+            ],
+            water: [
+                { name: 'Berwick', value: 0.02, unit: 'm³/m²' },
+                { name: 'Rockley Park', value: 0.03, unit: 'm³/m²' },
+                { name: 'Burnham-on-Sea', value: 0.04, unit: 'm³/m²' },
+                { name: 'Combe Haven', value: 0.05, unit: 'm³/m²' },
+                { name: 'Kiln Park', value: 0.06, unit: 'm³/m²' },
+                { name: 'Church Farm', value: 0.07, unit: 'm³/m²' },
+                { name: 'Cala Gran', value: 0.08, unit: 'm³/m²' },
+                { name: 'Weymouth Bay', value: 0.09, unit: 'm³/m²' },
+                { name: 'Craig Tara', value: 0.10, unit: 'm³/m²' },
+                { name: 'Hopton', value: 0.11, unit: 'm³/m²' }
+            ]
+        };
+        
+        const cardColors = {
+            energy: '#34AC41',
+            electricity: '#8574E0',
+            gas: '#EF743E',
+            water: '#0EA5E9'
+        };
+        
+        // Function to render own sites view
+        function renderOwnSitesView(cardType, sortOrder) {
+            const card = document.querySelector(`[data-card="${cardType}"]`);
+            const container = card.querySelector('.own-sites-view');
+            const color = cardColors[cardType];
+            let data = [...sitesData[cardType]];
+            
+            // Sort data
+            if (sortOrder === 'best') {
+                data.sort((a, b) => b.value - a.value);
+            } else {
+                data.sort((a, b) => a.value - b.value);
+            }
+            
+            const maxValue = Math.max(...data.map(d => d.value));
+            
+            container.innerHTML = data.map(site => `
+                <div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-zinc-700">${site.name}</span>
+                        <span><span class="text-sm font-semibold text-zinc-700">${site.value.toFixed(2)}</span> <span class="text-xs font-medium text-zinc-700">${site.unit}</span></span>
+                    </div>
+                    <div class="h-5 rounded" style="background-color: #E7E5E4;">
+                        <div class="h-5 rounded" style="background-color: ${color}; width: ${(site.value / maxValue) * 100}%;"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Benchmark type toggle (CIBSE / Own Sites)
+        const benchmarkTypeBtns = document.querySelectorAll('.benchmark-type-btn');
+        const sortToggles = document.querySelectorAll('.sort-toggle');
+        
+        benchmarkTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Reset all buttons
+                benchmarkTypeBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.backgroundColor = '';
+                    b.style.color = '';
+                    b.style.border = '';
+                    b.classList.add('text-zinc-500');
+                });
+                
+                // Set active button
+                btn.classList.add('active');
+                btn.classList.remove('text-zinc-500');
+                btn.style.backgroundColor = '#FFFFFF';
+                btn.style.color = '#3F3F46';
+                btn.style.border = '1px solid #E4E4E7';
+                
+                const isCibse = btn.dataset.type === 'cibse';
+                
+                // Toggle views
+                document.querySelectorAll('.cibse-view').forEach(view => {
+                    view.classList.toggle('hidden', !isCibse);
+                });
+                document.querySelectorAll('.own-sites-view').forEach(view => {
+                    view.classList.toggle('hidden', isCibse);
+                });
+                
+                // Toggle sort buttons
+                sortToggles.forEach(toggle => {
+                    toggle.classList.toggle('hidden', isCibse);
+                    toggle.classList.toggle('flex', !isCibse);
+                });
+                
+                // Render own sites if switching to Own Sites
+                if (!isCibse) {
+                    ['energy', 'electricity', 'gas', 'water'].forEach(cardType => {
+                        const card = document.querySelector(`[data-card="${cardType}"]`);
+                        const sortToggle = card.querySelector('.sort-toggle');
+                        const sortOrder = sortToggle.dataset.sort;
+                        renderOwnSitesView(cardType, sortOrder);
+                    });
+                }
+            });
+        });
+        
+        // Sort toggle functionality
+        sortToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const currentSort = toggle.dataset.sort;
+                const newSort = currentSort === 'best' ? 'worst' : 'best';
+                toggle.dataset.sort = newSort;
+                toggle.querySelector('.sort-text').textContent = newSort === 'best' ? 'Best' : 'Worst';
+                
+                const card = toggle.closest('[data-card]');
+                const cardType = card.dataset.card;
+                renderOwnSitesView(cardType, newSort);
+            });
+        });
+    </script>
+</body>
+</html>

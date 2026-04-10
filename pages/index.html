@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Hide scrollbar */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .search-input::placeholder {
+            color: #A1A1AA;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-[80px] fixed h-full flex flex-col border-r-2" style="background-color: #052e16; border-color: #052e16;">
+            <div class="my-2 p-2">
+                <div class="mb-6 flex justify-center">
+                    <img src="/assets/White-Logo.png" alt="Logo" style="width: 45px; height: 36px; object-fit: contain;">
+                </div>
+                <nav class="space-y-1">
+                    <a href="/pages/index.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center rounded-lg mb-1" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.15);">
+                            <i class="ph-gauge-fill text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Dashboard</span>
+                    </a>
+                    <a href="/pages/reports-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-chart-bar text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Reports</span>
+                    </a>
+                    <a href="/pages/actions-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-check-circle text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Actions</span>
+                    </a>
+                    <a href="/pages/alarms-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-bell-simple text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Alarms</span>
+                    </a>
+                    <a href="/pages/meters-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-list-checks text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Meters</span>
+                    </a>
+                    <a href="/pages/log-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-activity text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Log</span>
+                    </a>
+                    <a href="/pages/documents-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                        <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                            <i class="ph ph-file text-xl" style="color: #FFFFFF;"></i>
+                        </div>
+                        <span class="text-[11px]">Documents</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- Bottom navigation -->
+            <div class="mt-auto p-2 space-y-1 border-t-2 mx-3" style="border-color: rgba(255,255,255,0.2);">
+                <a href="/pages/settings-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-gear text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Settings</span>
+                </a>
+                <a href="/pages/support-page.html" class="flex flex-col items-center py-2 rounded-lg" style="color: #FFFFFF;">
+                    <div class="flex items-center justify-center mb-1" style="width: 32px; height: 32px;">
+                        <i class="ph ph-question text-xl" style="color: #FFFFFF;"></i>
+                    </div>
+                    <span class="text-[11px]">Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-[80px]">
+            <div class="max-w-[1274px] mx-auto">
+            <!-- Dashboard Header -->
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-3xl font-semibold text-zinc-900 mb-6">Dashboard</h1>
+                
+                <div class="relative">
+                    <div id="company-selector" class="flex items-center space-x-24 px-2 py-2 rounded-xl bg-white cursor-pointer">
+                        <div class="flex flex-row items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center">
+                            <img src="/assets/haven-logo.png" alt="Haven Logo" style="width: 38px; height: 38px; object-fit: contain;">
+                        </div>
+                        <div>
+                            <div class="text-xs font-medium text-zinc-500">Haven Holidays</div>
+                            <div class="text-sm font-medium text-zinc-900">Doniford Bay</div>
+                        </div>
+                        </div>
+                        <i class="ph-caret-down text-zinc-600"></i>
+                    </div>
+                    
+                    <!-- Company Dropdown -->
+                    <div id="company-dropdown" class="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-zinc-200 hidden z-50" style="width: 384px;">
+                        <!-- Search -->
+                        <div class="p-4">
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color: #A1A1AA;"></i>
+                                <input type="text" placeholder="Search sites" class="search-input w-full pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200" style="background-color: #F5F5F4; color: #3F3F46;">
+                            </div>
+                        </div>
+                        
+                        <!-- Sites List -->
+                        <div class="max-h-80 overflow-y-auto">
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer" data-site="Berwick">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Berwick</div>
+                                    <div class="text-xs text-zinc-500">Magdalene Fields, Berwick-upon-Tweed TD15...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Blue Dolphin">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Blue Dolphin</div>
+                                    <div class="text-xs text-zinc-500">11 Dolphin Way, Gristhorpe, Filey YO14 9PU</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Burnham-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Burnham-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Somerset, Marine Dr, Burnham-on-Sea TA8 1LA</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 border-zinc-300 flex items-center justify-center"></div>
+                            </div>
+                            <div class="site-item flex items-center justify-between px-4 py-3 hover:bg-zinc-50 cursor-pointer border-t border-zinc-100" data-site="Caister-on-Sea">
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-900">Caister-on-Sea</div>
+                                    <div class="text-xs text-zinc-500">Ormesby Rd, Caister-on-Sea, Great Yarmouth...</div>
+                                </div>
+                                <div class="site-checkbox w-5 h-5 rounded-full border-2 flex items-center justify-center active" style="border-color: #18181B; background-color: #18181B;">
+                                    <i class="ph ph-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabs-->
+            <div id="dashboard-tabs" class="flex space-x-10 w-full mb-6" style="border-bottom: 1px solid #E4E4E7;">
+                <a href="/pages/index.html" class="dashboard-tab active text-sm font-medium text-gray-900 border-b-2 border-gray-900 pb-2">Performance</a>
+                <a href="/pages/benchmark-page.html" class="dashboard-tab text-sm font-medium text-gray-500 pb-2 border-b-2 border-transparent hover:text-gray-700">Benchmark</a>
+                
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex justify-between items-center mb-6">
+                <div id="metric-filters" class="flex items-center space-x-3">
+                    <button class="metric-filter-btn active flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white">
+                        <i class="ph-chart-line-up"></i>
+                        <span>kWh</span>
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph ph-currency-gbp"></i>
+                        <span>Cost</span>
+                    </button>
+                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <i class="ph-tree"></i>
+                        <span>tCO²e</span>
+                    </button>
+                    <button class="time-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
+                        <span>Current year</span>
+                        <i class="ph-caret-down text-zinc-700"></i>
+                    </button>
+                </div>
+                <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 bg-zinc-900">
+                    <i class="ph-download-simple" style="color: #ffffff;"></i>
+                    <span class="text-white">Export</span>
+                </button>
+            </div>
+
+            <!-- Top Summary Cards - 112px height -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <!-- Savings Card -->
+                <div class="summary-card rounded-xl p-4 flex items-center justify-between" style="height: 112px; background-color: #ffffff;">
+                    <div>
+                        <div class="inline-block px-2 py-1 rounded text-sm font-medium mb-2" style="background-color: #D5F6D8; color: #22622a;">Savings</div>
+                        <div class="flex items-center space-x-2">
+                            <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
+                            <span class="text-3xl font-bold text-zinc-900">23.3%</span>
+                        </div>
+                    </div>
+                    <div class="relative" style="width: 130px; height: 90px;">
+                        <canvas id="savingsDonut" width="130" height="90"></canvas>
+                    </div>
+                </div>
+
+                <!-- Final Energy Card -->
+                <div class="summary-card rounded-xl p-4 flex items-center" style="height: 112px; background-color: #ffffff;">
+                    <div>
+                        <div class="text-sm font-medium text-zinc-500 mb-2">Final energy</div>
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-3xl font-bold text-zinc-900">217,875</span>
+                            <span class="font-bold text-zinc-900">kWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carbon Emissions Card -->
+                <div class="summary-card rounded-xl p-4 flex items-center" style="height: 112px; background-color: #ffffff;">
+                    <div>
+                        <div class="text-sm font-medium text-zinc-500 mb-2">Carbon emissions</div>
+                        <div class="flex items-baseline space-x-1">
+                            <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
+                            <span class="text-3xl font-bold text-zinc-900">1,261</span>
+                            <span class="font-bold text-zinc-900">tCO2e</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Utility Cards - 542px height -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Electricity Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #8574E0;">
+                                <i data-lucide="plug" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-lg font-medium text-zinc-900">Electricity</span>
+                                    <i class="ph-caret-right text-zinc-700 text-lg"></i>
+                                </div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <div class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #F5F5F4; border: 1px solid #E4E4E7;">
+                            <i class="ph-bell-simple text-2xl" style="color: #343330;"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[11px] flex items-center justify-center">2</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <!-- Container 1: Donut + Savings -->
+                        <div class="flex items-center space-x-3">
+                            <div class="relative" style="width: 80px; height: 48px;">
+                                <canvas id="electricityDonut" width="80" height="48"></canvas>
+                            </div>
+                            <div>
+                                <div class="inline-block px-2 py-1 rounded text-sm font-medium" style="background-color: #D5F6D8; color: #22622a;">Savings</div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
+                                    <span class="text-2xl font-bold text-zinc-900">15.5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Container 2: Year to date -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                            <div class="text-2xl font-bold text-zinc-900">16,264 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                        <!-- Container 3: vs last year -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                            <div class="text-2xl font-bold text-zinc-900">18,127 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="h-72">
+                        <canvas id="electricityChart"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #8574E0;"></div>
+                            <span class="text-sm text-zinc-500">Consumption</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #463877;"></div>
+                            <span class="text-sm text-zinc-500">Above norm</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-0.5 rounded bg-black"></div>
+                            <span class="text-sm text-zinc-500">Norm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gas Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #EF743E;">
+                                <i data-lucide="flame" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-lg font-medium text-zinc-900">Gas</span>
+                                    <i class="ph-caret-right text-zinc-700 text-lg"></i>
+                                </div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <div class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #F5F5F4; border: 1px solid #E4E4E7;">
+                            <i class="ph-bell-simple text-2xl" style="color: #343330;"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">5</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <!-- Container 1: Donut + Overspend -->
+                        <div class="flex items-center space-x-3">
+                            <div class="relative" style="width: 80px; height: 48px;">
+                                <canvas id="gasDonut" width="80" height="48"></canvas>
+                            </div>
+                            <div>
+                                <div class="inline-block px-2 py-1 rounded text-sm font-medium" style="background-color: #FEE2E2; color: #991B1B;">Overspend</div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="ph-arrow-up-right text-zinc-700 text-2xl"></i>
+                                    <span class="text-2xl font-bold text-zinc-900">0.7%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Container 2: Year to date -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                            <div class="text-2xl font-bold text-zinc-900">6,782 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                        <!-- Container 3: vs last year -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                            <div class="text-2xl font-bold text-zinc-900">6,905 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="h-72">
+                        <canvas id="gasChart"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #EF743E;"></div>
+                            <span class="text-sm text-zinc-500">Consumption</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #782617;"></div>
+                            <span class="text-sm text-zinc-500">Above norm</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-0.5 rounded  bg-black"></div>
+                            <span class="text-sm text-zinc-500">Norm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #0EA5E9;">
+                                <i data-lucide="waves" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-lg font-medium text-zinc-900">Water</span>
+                                    <i class="ph-caret-right text-zinc-700 text-lg"></i>
+                                </div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <div class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #F5F5F4; border: 1px solid #E4E4E7;">
+                            <i class="ph-bell-simple text-2xl" style="color: #343330;"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">1</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <!-- Container 1: Donut + Savings -->
+                        <div class="flex items-center space-x-3">
+                            <div class="relative" style="width: 80px; height: 48px;">
+                                <canvas id="waterDonut" width="80" height="48"></canvas>
+                            </div>
+                            <div>
+                                <div class="inline-block px-2 py-1 rounded text-sm font-medium" style="background-color: #D5F6D8; color: #22622a;">Savings</div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
+                                    <span class="text-2xl font-bold text-zinc-900">8.2%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Container 2: Year to date -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                            <div class="text-2xl font-bold text-zinc-900">4,521 <span class="text-base font-medium text-zinc-900">m³</span></div>
+                        </div>
+                        <!-- Container 3: vs last year -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                            <div class="text-2xl font-bold text-zinc-900">4,924 <span class="text-base font-medium text-zinc-900">m³</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="h-72">
+                        <canvas id="waterChart"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #0EA5E9;"></div>
+                            <span class="text-sm text-zinc-500">Consumption</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #075985;"></div>
+                            <span class="text-sm text-zinc-500">Above norm</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-0.5 rounded bg-black"></div>
+                            <span class="text-sm text-zinc-500">Norm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solar Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #DDAC15;">
+                                <i data-lucide="sun" class="w-5 h-5" style="color: #FFFFFF;"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-lg font-medium text-zinc-900">Solar</span>
+                                    <i class="ph-caret-right text-zinc-700 text-lg"></i>
+                                </div>
+                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
+                            </div>
+                        </div>
+                        <div class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #F5F5F4; border: 1px solid #E4E4E7;">
+                            <i class="ph-bell-simple text-2xl" style="color: #343330;"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <!-- Container 1: Donut + Generation -->
+                        <div class="flex items-center space-x-3">
+                            <div class="relative" style="width: 80px; height: 48px;">
+                                <canvas id="solarDonut" width="80" height="48"></canvas>
+                            </div>
+                            <div>
+                                <div class="inline-block px-2 py-1 rounded text-sm font-medium" style="background-color: #FEF3C7; color: #92400E;">Generation</div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="ph-arrow-up-right text-zinc-700 text-2xl"></i>
+                                    <span class="text-2xl font-bold text-zinc-900">12.4%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Container 2: Year to date -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                            <div class="text-2xl font-bold text-zinc-900">8,945 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                        <!-- Container 3: vs last year -->
+                        <div>
+                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                            <div class="text-2xl font-bold text-zinc-900">7,956 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="h-72">
+                        <canvas id="solarChart"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #DDAC15;"></div>
+                            <span class="text-sm text-zinc-500">Consumption</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #986010;"></div>
+                            <span class="text-sm text-zinc-500">Above norm</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-0.5 rounded bg-black"></div>
+                            <span class="text-sm text-zinc-500">Norm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-lg font-medium text-zinc-900">Calendar view</span>
+                    </div>
+
+                    <!-- Month Navigation -->
+                    <div class="flex items-center justify-between mb-6">
+                        <button id="calendar-prev" class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #FFFFFF; border: 1px solid #D4D4D8;">
+                            <i class="ph ph-caret-left text-gray-700 text-lg"></i>
+                        </button>
+                        <span id="calendar-month-year" class="text-base font-medium" style="color: #3F3F46;">September 2025</span>
+                        <button id="calendar-next" class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #FFFFFF; border: 1px solid #D4D4D8;">
+                            <i class="ph ph-caret-right text-gray-700 text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Day Names -->
+                    <div class="grid grid-cols-7 gap-2 mb-4" id="calendar-day-names"></div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-2" id="calendar-grid"></div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-center space-x-6 mt-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #279133;"></div>
+                            <span class="text-sm text-zinc-500">Saving</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #FCA5A5;"></div>
+                            <span class="text-sm text-zinc-500">Overspend</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #F87171;"></div>
+                            <span class="text-sm text-zinc-500">Alarms</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded" style="background-color: #CBD5E1;"></div>
+                            <span class="text-sm text-zinc-500">Notes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year on year savings Card -->
+                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-7">
+                        <div class="flex items-center space-x-3">
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-lg font-medium text-zinc-900">Year on year savings</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Savings List -->
+                    <div class="space-y-0">
+                        <!-- Year to day -->
+                        <div class="flex items-center justify-between py-4" style="border-top: 1px solid #E4E4E7; border-bottom: 1px solid #E4E4E7;">
+                            <span class="text-sm font-medium text-zinc-500">Year to day</span>
+                            <span class="text-base font-medium text-zinc-700">12,345,678 kWh</span>
+                        </div>
+                        <!-- 2024 -->
+                        <div class="flex items-center justify-between py-4" style="border-bottom: 1px solid #E4E4E7;">
+                            <span class="text-sm font-medium text-zinc-500">2024</span>
+                            <span class="text-base font-medium text-zinc-700">10,987,654 kWh</span>
+                        </div>
+                        <!-- 2023 -->
+                        <div class="flex items-center justify-between py-4" style="border-bottom: 1px solid #E4E4E7;">
+                            <span class="text-sm font-medium text-zinc-500">2023</span>
+                            <span class="text-base font-medium text-zinc-700">13,456,789 kWh</span>
+                        </div>
+                        <!-- 2022 -->
+                        <div class="flex items-center justify-between py-4" style="border-bottom: 1px solid #E4E4E7;">
+                            <span class="text-sm font-medium text-zinc-500">2022</span>
+                            <span class="text-base font-medium text-zinc-700">-5,876,543 kWh</span>
+                        </div>
+                        <!-- 2021 -->
+                        <div class="flex items-center justify-between py-4">
+                            <span class="text-sm font-medium text-zinc-500">2021</span>
+                            <span class="text-base font-medium text-zinc-700">14,321,098 kWh</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+
+            // =====================
+            // Company Selector
+            // =====================
+            
+            const companySelector = document.getElementById('company-selector');
+            const companyDropdown = document.getElementById('company-dropdown');
+            
+            companySelector.addEventListener('click', (e) => {
+                e.stopPropagation();
+                companyDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!companyDropdown.contains(e.target) && !companySelector.contains(e.target)) {
+                    companyDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Site item selection
+            const siteItems = document.querySelectorAll('.site-item');
+            siteItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    // Update checkmark visuals
+                    siteItems.forEach(s => {
+                        const checkbox = s.querySelector('.site-checkbox');
+                        checkbox.classList.remove('active');
+                        checkbox.style.borderColor = '#D4D4D8';
+                        checkbox.style.backgroundColor = 'transparent';
+                        checkbox.innerHTML = '';
+                    });
+                    
+                    const checkbox = item.querySelector('.site-checkbox');
+                    checkbox.classList.add('active');
+                    checkbox.style.borderColor = '#18181B';
+                    checkbox.style.backgroundColor = '#18181B';
+                    
+                    const checkIcon = document.createElement('i');
+                    checkIcon.className = 'ph ph-check text-white text-xs';
+                    checkbox.appendChild(checkIcon);
+                    
+                    // Close dropdown
+                    companyDropdown.classList.add('hidden');
+                });
+            });
+
+            // =====================
+            // Reusable Chart Config
+            // =====================
+            
+            const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            // Half-circle gauge factory (190 degree arc)
+            function createGauge(canvasId, value) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                
+                const width = canvas.width;
+                const height = canvas.height;
+                const centerX = width / 2;
+                const centerY = canvasId === 'savingsDonut' ? height - 24 : height - 12;
+                const radius = Math.min(width / 2, height) - 12; // Leave room for rounded caps
+                
+                // Gauge thickness - slightly thicker than before, with rounded caps
+                const indicatorOuterRadius = canvasId === 'savingsDonut' ? 9 : 7;
+                const indicatorInnerRadius = canvasId === 'savingsDonut' ? 7 : 5;
+                const lineWidth = canvasId === 'savingsDonut' ? 12 : 8;
+                
+                // Extra angle for 190 degree arc (5 degrees on each side)
+                const extraAngle = (5 * Math.PI) / 180;
+                const arcStart = Math.PI - extraAngle;      // 175 degrees
+                const arcEnd = 2 * Math.PI + extraAngle;    // 365 degrees
+                
+                // Determine color based on value
+                // -1 to -100: Saving (green)
+                // 0 to 20: Just over (yellow)
+                // 21 to 100: Overspend (red)
+                let indicatorColor;
+                if (value < 0) {
+                    indicatorColor = '#279133'; // Green for savings
+                } else if (value <= 20) {
+                    indicatorColor = '#EAB308'; // Yellow for just over
+                } else {
+                    indicatorColor = '#DC2626'; // Red for overspend
+                }
+                
+                // Center point is at top (1.5π), 0 = center
+                // Negative values go left (toward arcStart), positive go right (toward arcEnd)
+                const normalizedValue = Math.max(-100, Math.min(100, value));
+                // Map: -100 -> arcStart, 0 -> 1.5π, 100 -> arcEnd
+                const halfArc = (arcEnd - arcStart) / 2;
+                const angle = (3 * Math.PI / 2) + (normalizedValue / 100) * halfArc;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw background track (gray arc from arcStart to arcEnd - 190 degrees)
+                ctx.save();
+                ctx.beginPath();
+                ctx.lineCap = 'round';
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#E5E7EB';
+                ctx.arc(centerX, centerY, radius, arcStart, arcEnd, false);
+                ctx.stroke();
+                ctx.restore();
+                
+                // Draw colored arc from center (1.5π) to indicator position
+                ctx.save();
+                ctx.beginPath();
+                ctx.lineCap = 'round';
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = indicatorColor;
+                if (value < 0) {
+                    // For negative values, draw from angle to center (going right)
+                    ctx.arc(centerX, centerY, radius, angle, 3 * Math.PI / 2, false);
+                } else {
+                    // For positive values, draw from center to angle (going right)
+                    ctx.arc(centerX, centerY, radius, 3 * Math.PI / 2, angle, false);
+                }
+                ctx.stroke();
+                ctx.restore();
+                
+                // Calculate indicator position
+                const indicatorX = centerX + radius * Math.cos(angle);
+                const indicatorY = centerY + radius * Math.sin(angle);
+                
+                // Draw circular indicator with white border
+                ctx.beginPath();
+                ctx.arc(indicatorX, indicatorY, indicatorOuterRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fill();
+                
+                // Draw colored indicator inner circle
+                ctx.beginPath();
+                ctx.arc(indicatorX, indicatorY, indicatorInnerRadius, 0, Math.PI * 2);
+                ctx.fillStyle = indicatorColor;
+                ctx.fill();
+            }
+
+            // Vertical dashed grid plugin
+            const verticalDashedGridPlugin = {
+                id: 'verticalDashedGrid',
+                beforeDatasetsDraw(chart) {
+                    const { ctx, chartArea } = chart;
+                    const columnWidth = (chartArea.right - chartArea.left) / 12;
+                    
+                    ctx.save();
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeStyle = '#E5E7EB';
+                    ctx.lineWidth = 1;
+                    
+                    for (let i = 0; i <= 12; i++) {
+                        const x = chartArea.left + (i * columnWidth);
+                        ctx.beginPath();
+                        ctx.moveTo(x, chartArea.top);
+                        ctx.lineTo(x, chartArea.bottom);
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+            };
+
+            // Norm line plugin factory
+            function createNormLinePlugin(normValues) {
+                return {
+                    afterDatasetsDraw(chart) {
+                        const { ctx, chartArea, scales } = chart;
+                        const yAxis = scales.yRight;
+                        const columnWidth = (chartArea.right - chartArea.left) / 12;
+                        
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#1f2937';
+                        ctx.lineWidth = 2;
+                        
+                        normValues.forEach((val, i) => {
+                            const barCenterX = chartArea.left + (i * columnWidth) + (columnWidth / 2);
+                            const y = yAxis.getPixelForValue(val);
+                            
+                            if (i === 0) {
+                                ctx.moveTo(barCenterX, y);
+                            } else {
+                                ctx.lineTo(barCenterX, y);
+                            }
+                        });
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                };
+            }
+
+            // Generate bar colors based on norm comparison
+            function generateBarColors(data, normValues, belowColor, aboveColor) {
+                return data.map((value, i) => value > normValues[i] ? aboveColor : belowColor);
+            }
+
+            // Bar chart factory
+            function createBarChart(canvasId, data, normValues, belowColor, aboveColor, unit = 'kWh') {
+                const ctx = document.getElementById(canvasId)?.getContext('2d');
+                if (!ctx) return;
+
+                const colors = generateBarColors(data, normValues, belowColor, aboveColor);
+
+                return new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: MONTHS,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderRadius: 4,
+                            barThickness: 29,
+                            maxBarThickness: 42
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#6b7280', font: { size: 11 } }
+                            },
+                            y: {
+                                display: false,
+                                beginAtZero: true,
+                                max: 160
+                            },
+                            yRight: {
+                                position: 'right',
+                                beginAtZero: true,
+                                max: 160,
+                                grid: { 
+                                    color: (ctx) => ctx.tick.value === 0 ? 'transparent' : '#E5E7EB',
+                                    drawBorder: false,
+                                    lineWidth: 1,
+                                    drawTicks: false
+                                },
+                                border: { display: false },
+                                ticks: { 
+                                    stepSize: 20,
+                                    count: 9,
+                                    color: '#6b7280',
+                                    font: { size: 11 },
+                                    callback: (value) => value === 0 ? unit : (value % 40 === 0 ? value : '')
+                                }
+                            }
+                        }
+                    },
+                    plugins: [verticalDashedGridPlugin, createNormLinePlugin(normValues)]
+                });
+            }
+
+            // =====================
+            // Chart Data
+            // =====================
+            
+            const chartConfigs = {
+                electricity: {
+                    gaugeId: 'electricityDonut',
+                    chartId: 'electricityChart',
+                    gaugeValue: -15.5,
+                    data: [105, 125, 150, 115, 125, 130, 100, 105, 115, 60, 55, 50],
+                    norm: [95, 105, 110, 100, 105, 100, 90, 95, 100, 80, 75, 70],
+                    belowColor: '#8574E0',
+                    aboveColor: '#463877',
+                    unit: 'kWh'
+                },
+                gas: {
+                    gaugeId: 'gasDonut',
+                    chartId: 'gasChart',
+                    gaugeValue: 0.7,
+                    data: [105, 125, 150, 115, 125, 130, 100, 105, 115, 60, 55, 50],
+                    norm: [95, 105, 110, 100, 105, 100, 90, 95, 100, 80, 75, 70],
+                    belowColor: '#EF743E',
+                    aboveColor: '#782617',
+                    unit: 'kWh'
+                },
+                water: {
+                    gaugeId: 'waterDonut',
+                    chartId: 'waterChart',
+                    gaugeValue: -8.2,
+                    data: [105, 125, 150, 115, 125, 130, 100, 105, 115, 60, 55, 50],
+                    norm: [95, 105, 110, 100, 105, 100, 90, 95, 100, 80, 75, 70],
+                    belowColor: '#0EA5E9',
+                    aboveColor: '#075985',
+                    unit: 'm³'
+                },
+                solar: {
+                    gaugeId: 'solarDonut',
+                    chartId: 'solarChart',
+                    gaugeValue: -12.4,
+                    data: [105, 125, 150, 115, 125, 130, 100, 105, 115, 60, 55, 50],
+                    norm: [95, 105, 110, 100, 105, 100, 90, 95, 100, 80, 75, 70],
+                    belowColor: '#DDAC15',
+                    aboveColor: '#986010',
+                    unit: 'kWh'
+                }
+            };
+
+            // =====================
+            // Initialize Charts
+            // =====================
+            
+            // Savings gauge (top card)
+            createGauge('savingsDonut', -23.3);
+
+            // Utility charts
+            Object.values(chartConfigs).forEach(config => {
+                createGauge(config.gaugeId, config.gaugeValue);
+                createBarChart(config.chartId, config.data, config.norm, config.belowColor, config.aboveColor, config.unit);
+            });
+
+            // =====================
+            // Tab & Filter Handlers
+            // =====================
+
+            // Tab switching
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('active', 'text-gray-900', 'border-gray-900');
+                        t.classList.add('text-gray-500', 'border-transparent');
+                    });
+                    tab.classList.add('active', 'text-gray-900', 'border-gray-900');
+                    tab.classList.remove('text-gray-500', 'border-transparent');
+                });
+            });
+
+            // Metric filter buttons (kWh, Cost, tCO₂e)
+            const metricFilters = document.querySelectorAll('.metric-filter-btn');
+            metricFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    metricFilters.forEach(b => {
+                        b.classList.remove('active', 'bg-gray-900', 'text-white');
+                        b.classList.add('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                        const icon = b.querySelector('i');
+                        if (icon) icon.classList.add('text-zinc-500');
+                    });
+                    btn.classList.add('active', 'bg-gray-900', 'text-white');
+                    btn.classList.remove('border', 'border-zinc-300', 'text-zinc-700', 'bg-white');
+                    const icon = btn.querySelector('i');
+                    if (icon) icon.classList.remove('text-zinc-500');
+                });
+            });
+
+            // =====================
+            // Calendar Component
+            // =====================
+            
+            const calendarConfig = {
+                colors: {
+                    green: '#279133',
+                    red: '#FCA5A5',
+                    redText: '#450A0A',
+                    alarmPill: '#F87171',
+                    notesPill: '#CBD5E1',
+                    dayName: '#71717A',
+                    currentDay: '#3F3F46',
+                    muted: '#A1A1AA'
+                },
+                dayNames: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 
+                             'July', 'August', 'September', 'October', 'November', 'December']
+            };
+
+            // Sample data - in production, fetch from API
+            const calendarData = {
+                '2025-09': {
+                    2: { status: 'saving' },
+                    3: { status: 'overspend' },
+                    4: { status: 'overspend' },
+                    5: { status: 'saving' },
+                    6: { status: 'overspend', notes: true },
+                    10: { status: 'overspend', alarms: true, notes: true },
+                    11: { status: 'saving' },
+                    12: { status: 'saving' },
+                    13: { status: 'saving' },
+                    17: { status: 'overspend', alarms: true, notes: true }
+                }
+            };
+
+            let currentDate = new Date(2025, 8, 1); // September 2025
+
+            function renderDayNames() {
+                const container = document.getElementById('calendar-day-names');
+                container.innerHTML = calendarConfig.dayNames
+                    .map(day => `<div class="text-center text-xs font-medium" style="color: ${calendarConfig.colors.dayName};">${day}</div>`)
+                    .join('');
+            }
+
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+                const monthData = calendarData[monthKey] || {};
+
+                // Update header
+                document.getElementById('calendar-month-year').textContent = 
+                    `${calendarConfig.monthNames[month]} ${year}`;
+
+                // Get first day of month (0=Sun, convert to Mon=0)
+                const firstDay = new Date(year, month, 1).getDay();
+                const startDay = firstDay === 0 ? 6 : firstDay - 1;
+                
+                // Get days in month
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+                const grid = document.getElementById('calendar-grid');
+                const totalCells = 35; // 7 columns x 5 rows
+                let html = '';
+                let cellCount = 0;
+
+                // Previous month days
+                for (let i = startDay - 1; i >= 0 && cellCount < totalCells; i--) {
+                    const day = daysInPrevMonth - i;
+                    html += createDayCell(day, true);
+                    cellCount++;
+                }
+
+                // Current month days
+                for (let day = 1; day <= daysInMonth && cellCount < totalCells; day++) {
+                    const data = monthData[day];
+                    html += createDayCell(day, false, data);
+                    cellCount++;
+                }
+
+                // Next month days (fill remaining cells)
+                let nextDay = 1;
+                while (cellCount < totalCells) {
+                    html += createDayCell(nextDay, true);
+                    cellCount++;
+                    nextDay++;
+                }
+
+                grid.innerHTML = html;
+            }
+
+            function createDayCell(day, isMuted, data = null) {
+                const { colors } = calendarConfig;
+                let content = '';
+                let pills = '';
+
+                if (data) {
+                    const bgColor = data.status === 'saving' ? colors.green : colors.red;
+                    const textColor = data.status === 'saving' ? '#FFFFFF' : colors.redText;
+                    content = `<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: ${bgColor};">
+                        <span class="text-base font-medium" style="color: ${textColor};">${day}</span>
+                    </div>`;
+
+                    if (data.alarms || data.notes) {
+                        pills = '<div class="absolute bottom-0 flex space-x-0.5">';
+                        if (data.alarms) pills += `<div class="w-2 h-1 rounded-full" style="background-color: ${colors.alarmPill};"></div>`;
+                        if (data.notes) pills += `<div class="w-2 h-1 rounded-full" style="background-color: ${colors.notesPill};"></div>`;
+                        pills += '</div>';
+                    }
+                } else {
+                    const textColor = isMuted ? colors.muted : colors.currentDay;
+                    content = `<span class="text-base" style="color: ${textColor};">${day}</span>`;
+                }
+
+                return `<div class="h-14 relative flex flex-col items-center justify-center">${content}${pills}</div>`;
+            }
+
+            // Initialize calendar
+            renderDayNames();
+            renderCalendar();
+
+            // Navigation handlers
+            document.getElementById('calendar-prev').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            document.getElementById('calendar-next').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+        });
+    </script>
+</body>
+</html>
