@@ -168,76 +168,99 @@
 
             <!-- Filter Buttons -->
             <div class="flex justify-between items-center mb-6">
-                <div id="metric-filters" class="flex items-center space-x-3">
-                    <button class="metric-filter-btn active flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white">
-                        <i class="ph-chart-line-up"></i>
-                        <span>kWh</span>
-                    </button>
-                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
-                        <i class="ph ph-currency-gbp"></i>
-                        <span>Cost</span>
-                    </button>
-                    <button class="metric-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
-                        <i class="ph-tree"></i>
-                        <span>tCO²e</span>
-                    </button>
+                <div></div>
+                <div class="flex items-center space-x-3">
                     <button class="time-filter-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 text-zinc-700 bg-white">
                         <span>Current year</span>
                         <i class="ph-caret-down text-zinc-700"></i>
                     </button>
+                    <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 bg-zinc-900">
+                        <i class="ph-download-simple" style="color: #ffffff;"></i>
+                        <span class="text-white">Export</span>
+                    </button>
                 </div>
-                <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-zinc-300 bg-zinc-900">
-                    <i class="ph-download-simple" style="color: #ffffff;"></i>
-                    <span class="text-white">Export</span>
-                </button>
             </div>
 
             <!-- Top Summary Cards - 112px height -->
             <div class="grid grid-cols-3 gap-4 mb-6">
-                <!-- Savings Card -->
-                <div class="summary-card rounded-xl p-4 flex items-center justify-between" style="height: 112px; background-color: #ffffff;">
+                <!-- Final Energy Card (default active) -->
+                <div id="filter-final-energy" class="summary-card rounded-xl p-4 flex items-center justify-between cursor-pointer summary-filter active" style="height: 112px; background-color: #052e16; color: #fff;">
                     <div>
-                        <div class="inline-block px-2 py-1 rounded text-sm font-medium mb-2" style="background-color: #D5F6D8; color: #22622a;">Savings</div>
-                        <div class="flex items-center space-x-2">
-                            <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
-                            <span class="text-3xl font-bold text-zinc-900">23.3%</span>
+                        <div class="text-sm font-medium mb-2" style="color: #ffffff;">Final energy</div>
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-3xl font-bold">217,875</span>
+                            <span class="font-bold">kWh</span>
                         </div>
                     </div>
                     <div class="relative" style="width: 130px; height: 90px;">
                         <canvas id="savingsDonut" width="130" height="90"></canvas>
                     </div>
                 </div>
-
-                <!-- Final Energy Card -->
-                <div class="summary-card rounded-xl p-4 flex items-center" style="height: 112px; background-color: #ffffff;">
+                <!-- Savings Card -->
+                <div id="filter-savings" class="summary-card rounded-xl p-4 flex items-center justify-between cursor-pointer summary-filter" style="height: 112px; background-color: #ffffff; color: #18181B;">
                     <div>
-                        <div class="text-sm font-medium text-zinc-500 mb-2">Final energy</div>
-                        <div class="flex items-baseline space-x-1">
-                            <span class="text-3xl font-bold text-zinc-900">217,875</span>
-                            <span class="font-bold text-zinc-900">kWh</span>
+                        <div class="text-sm font-medium mb-2" style="color: #71717A;">Cost</div>
+                        <div class="flex items-center space-x-2">
+                            <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
+                            <span class="text-3xl font-bold">23.3%</span>
                         </div>
                     </div>
+                    <div class="text-sm font-medium mr-4" style="color: #22622a; background-color: #D5F6D8; display: inline-block; padding: 2px 8px; border-radius: 6px;">Savings</div>
                 </div>
-
                 <!-- Carbon Emissions Card -->
-                <div class="summary-card rounded-xl p-4 flex items-center" style="height: 112px; background-color: #ffffff;">
+                <div id="filter-carbon" class="summary-card rounded-xl p-4 flex items-center cursor-pointer summary-filter" style="height: 112px; background-color: #ffffff; color: #18181B;">
                     <div>
-                        <div class="text-sm font-medium text-zinc-500 mb-2">Carbon emissions</div>
+                        <div class="text-sm font-medium mb-2" style="color: #71717A;">Carbon emissions</div>
                         <div class="flex items-baseline space-x-1">
                             <i class="ph-arrow-down-right text-zinc-700 text-2xl"></i>
-                            <span class="text-3xl font-bold text-zinc-900">1,261</span>
-                            <span class="font-bold text-zinc-900">tCO2e</span>
+                            <span class="text-3xl font-bold">1,261</span>
+                            <span class="font-bold">tCO2e</span>
                         </div>
                     </div>
                 </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const summaryFilters = document.querySelectorAll('.summary-filter');
+
+                            summaryFilters.forEach(card => {
+                                card.addEventListener('click', function() {
+                                    summaryFilters.forEach(c => {
+                                        c.classList.remove('active');
+                                        c.style.backgroundColor = '#ffffff';
+                                        c.style.color = '#18181B';
+
+                                        // Reset title color
+                                        const title = c.querySelector('.text-sm');
+                                        if (title) title.style.color = '#71717A';
+
+                                        // Reset icon color
+                                        const icon = c.querySelector('i');
+                                        if (icon) icon.style.color = '#3f3f46'; // zinc-700 equivalent
+                                    });
+
+                                    this.classList.add('active');
+                                    this.style.backgroundColor = '#052e16';
+                                    this.style.color = '#fff';
+
+                                    // Make title white
+                                    const title = this.querySelector('.text-sm');
+                                    if (title) title.style.color = '#ffffff';
+
+                                    // Make icon white
+                                    const icon = this.querySelector('i');
+                                    if (icon) icon.style.color = '#ffffff';
+                                });
+                            });
+                        });
+                    </script>
             </div>
 
             <!-- Utility Cards - 542px height -->
             <div class="grid grid-cols-2 gap-4">
                 <!-- Electricity Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                <div class="utility-card rounded-xl p-6 cursor-pointer" id="electricity-card" style="height: 515px; background-color: #ffffff;">
                     <!-- Header -->
-                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                    <div class="flex items-center justify-between mb-5 pb-4" style="border-bottom: 1px solid #E4E4E7;">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #8574E0;">
                                 <i data-lucide="plug" class="w-5 h-5" style="color: #FFFFFF;"></i>
@@ -257,7 +280,7 @@
                     </div>
 
                     <!-- Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="flex items-center justify-between mb-3 mr-8">
                         <!-- Container 1: Donut + Savings -->
                         <div class="flex items-center space-x-3">
                             <div class="relative" style="width: 80px; height: 48px;">
@@ -272,14 +295,20 @@
                             </div>
                         </div>
                         <!-- Container 2: Year to date -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
-                            <div class="text-2xl font-bold text-zinc-900">16,264 <span class="text-base font-medium text-zinc-900">kWh</span></div>
-                        </div>
+                        <div class="flex items-center space-x-8">
+                            <div >
+                                <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                                <div class="text-2xl font-bold text-zinc-900">
+                                    16,264 <span class="text-base font-medium text-zinc-900">kWh</span>
+                                </div>
+                            </div>
                         <!-- Container 3: vs last year -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
-                            <div class="text-2xl font-bold text-zinc-900">18,127 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                            <div>
+                                <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                                <div class="text-2xl font-bold text-zinc-900">
+                                    18,127 <span class="text-base font-medium text-zinc-900">kWh</span>
+                                </div>  
+                            </div>
                         </div>
                     </div>
 
@@ -306,9 +335,9 @@
                 </div>
 
                 <!-- Gas Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                <div class="utility-card rounded-xl p-6 cursor-pointer" id="gas-card" style="height: 515px; background-color: #ffffff;">
                     <!-- Header -->
-                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                    <div class="flex items-center justify-between mb-5 pb-4" style="border-bottom: 1px solid #E4E4E7;">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #EF743E;">
                                 <i data-lucide="flame" class="w-5 h-5" style="color: #FFFFFF;"></i>
@@ -328,7 +357,7 @@
                     </div>
 
                     <!-- Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="flex items-center justify-between mb-3 mr-8">
                         <!-- Container 1: Donut + Overspend -->
                         <div class="flex items-center space-x-3">
                             <div class="relative" style="width: 80px; height: 48px;">
@@ -343,14 +372,18 @@
                             </div>
                         </div>
                         <!-- Container 2: Year to date -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
-                            <div class="text-2xl font-bold text-zinc-900">6,782 <span class="text-base font-medium text-zinc-900">kWh</span></div>
-                        </div>
-                        <!-- Container 3: vs last year -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
-                            <div class="text-2xl font-bold text-zinc-900">6,905 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                        <div class="flex items-center space-x-8">
+                            <div>
+                                <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                                <div class="text-2xl font-bold text-zinc-900">
+                                    6,782 <span class="text-base font-medium text-zinc-900">kWh</span>
+                                </div>
+                            </div>
+                            <!-- Container 3: vs last year -->
+                            <div>
+                                <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                                <div class="text-2xl font-bold text-zinc-900">6,905 <span class="text-base font-medium text-zinc-900">kWh</span></div>
+                            </div>
                         </div>
                     </div>
 
@@ -377,9 +410,9 @@
                 </div>
 
                 <!-- Water Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                <div class="utility-card rounded-xl p-6 cursor-pointer" id="water-card" style="height: 515px; background-color: #ffffff;">
                     <!-- Header -->
-                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
+                    <div class="flex items-center justify-between mb-5 pb-4" style="border-bottom: 1px solid #E4E4E7;">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #0EA5E9;">
                                 <i data-lucide="waves" class="w-5 h-5" style="color: #FFFFFF;"></i>
@@ -399,7 +432,7 @@
                     </div>
 
                     <!-- Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="flex items-center justify-between mb-3 mr-8">
                         <!-- Container 1: Donut + Savings -->
                         <div class="flex items-center space-x-3">
                             <div class="relative" style="width: 80px; height: 48px;">
@@ -414,14 +447,16 @@
                             </div>
                         </div>
                         <!-- Container 2: Year to date -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
-                            <div class="text-2xl font-bold text-zinc-900">4,521 <span class="text-base font-medium text-zinc-900">m³</span></div>
-                        </div>
+                        <div class="flex items-center space-x-8">
+                            <div>
+                                <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
+                                <div class="text-2xl font-bold text-zinc-900">4,521 <span class="text-base font-medium text-zinc-900">m³</span></div>
+                            </div>
                         <!-- Container 3: vs last year -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
-                            <div class="text-2xl font-bold text-zinc-900">4,924 <span class="text-base font-medium text-zinc-900">m³</span></div>
+                            <div>
+                                <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
+                                <div class="text-2xl font-bold text-zinc-900">4,924 <span class="text-base font-medium text-zinc-900">m³</span></div>
+                            </div>
                         </div>
                     </div>
 
@@ -447,79 +482,8 @@
                     </div>
                 </div>
 
-                <!-- Solar Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
-                    <!-- Header -->
-                    <div class="flex items-center justify-between mb-4 pb-4" style="border-bottom: 1px solid #E4E4E7;">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background-color: #DDAC15;">
-                                <i data-lucide="sun" class="w-5 h-5" style="color: #FFFFFF;"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center space-x-1">
-                                    <span class="text-lg font-medium text-zinc-900">Solar</span>
-                                    <i class="ph-caret-right text-zinc-700 text-lg"></i>
-                                </div>
-                                <div class="text-xs text-zinc-500">1 Jan – 30 Sep 2025</div>
-                            </div>
-                        </div>
-                        <div class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #F5F5F4; border: 1px solid #E4E4E7;">
-                            <i class="ph-bell-simple text-2xl" style="color: #343330;"></i>
-                            <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center">0</span>
-                        </div>
-                    </div>
-
-                    <!-- Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 mb-6">
-                        <!-- Container 1: Donut + Generation -->
-                        <div class="flex items-center space-x-3">
-                            <div class="relative" style="width: 80px; height: 48px;">
-                                <canvas id="solarDonut" width="80" height="48"></canvas>
-                            </div>
-                            <div>
-                                <div class="inline-block px-2 py-1 rounded text-sm font-medium" style="background-color: #FEF3C7; color: #92400E;">Generation</div>
-                                <div class="flex items-center space-x-1">
-                                    <i class="ph-arrow-up-right text-zinc-700 text-2xl"></i>
-                                    <span class="text-2xl font-bold text-zinc-900">12.4%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Container 2: Year to date -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">Year to date</div>
-                            <div class="text-2xl font-bold text-zinc-900">8,945 <span class="text-base font-medium text-zinc-900">kWh</span></div>
-                        </div>
-                        <!-- Container 3: vs last year -->
-                        <div>
-                            <div class="text-sm font-medium text-zinc-500 mb-2">vs last year</div>
-                            <div class="text-2xl font-bold text-zinc-900">7,956 <span class="text-base font-medium text-zinc-900">kWh</span></div>
-                        </div>
-                    </div>
-
-                    <!-- Chart -->
-                    <div class="h-72">
-                        <canvas id="solarChart"></canvas>
-                    </div>
-
-                    <!-- Legend -->
-                    <div class="flex items-center justify-center space-x-6 mt-4">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 rounded" style="background-color: #DDAC15;"></div>
-                            <span class="text-sm text-zinc-500">Consumption</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 rounded" style="background-color: #986010;"></div>
-                            <span class="text-sm text-zinc-500">Above norm</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-4 h-0.5 rounded bg-black"></div>
-                            <span class="text-sm text-zinc-500">Norm</span>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Calendar Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                <div class="utility-card rounded-xl p-6" style="height: 515px; background-color: #ffffff;">
                     <!-- Header -->
                     <div class="flex items-center justify-between mb-6">
                         <span class="text-lg font-medium text-zinc-900">Calendar view</span>
@@ -543,7 +507,7 @@
                     <div class="grid grid-cols-7 gap-2" id="calendar-grid"></div>
 
                     <!-- Legend -->
-                    <div class="flex items-center justify-center space-x-6 mt-2">
+                    <div class="flex items-center justify-center space-x-6 mt-1">
                         <div class="flex items-center space-x-2">
                             <div class="w-3 h-3 rounded" style="background-color: #279133;"></div>
                             <span class="text-sm text-zinc-500">Saving</span>
@@ -564,7 +528,7 @@
                 </div>
 
                 <!-- Year on year savings Card -->
-                <div class="utility-card rounded-xl p-6" style="height: 542px; background-color: #ffffff;">
+                <div class="utility-card rounded-xl p-6" style="height: 515px; background-color: #ffffff;">
                     <!-- Header -->
                     <div class="flex items-center justify-between mb-7">
                         <div class="flex items-center space-x-3">
@@ -1068,7 +1032,7 @@
                 if (data) {
                     const bgColor = data.status === 'saving' ? colors.green : colors.red;
                     const textColor = data.status === 'saving' ? '#FFFFFF' : colors.redText;
-                    content = `<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: ${bgColor};">
+                    content = `<div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: ${bgColor};">
                         <span class="text-base font-medium" style="color: ${textColor};">${day}</span>
                     </div>`;
 
@@ -1100,6 +1064,27 @@
                 currentDate.setMonth(currentDate.getMonth() + 1);
                 renderCalendar();
             });
+            // =====================
+            // Utility Card Navigation
+            // =====================
+            const electricityCard = document.getElementById('electricity-card');
+            if (electricityCard) {
+                electricityCard.addEventListener('click', () => {
+                    window.location.href = '/pages/reports-page.html#electricity';
+                });
+            }
+            const gasCard = document.getElementById('gas-card');
+            if (gasCard) {
+                gasCard.addEventListener('click', () => {
+                    window.location.href = '/pages/reports-page.html#gas';
+                });
+            }
+             const waterCard = document.getElementById('water-card');
+            if (waterCard) {
+                waterCard.addEventListener('click', () => {
+                    window.location.href = '/pages/reports-page.html#water';
+                });
+            }
         });
     </script>
 </body>

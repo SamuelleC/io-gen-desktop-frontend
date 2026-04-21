@@ -232,35 +232,35 @@
                             <style>
                                 #meters-list::-webkit-scrollbar { display: none; }
                             </style>
-                        <div class="meter-item active p-3 rounded-xl bg-white border-2 border-zinc-900 cursor-pointer">
+                        <div class="meter-item p-3 rounded-xl border border-zinc-200 cursor-pointer active">
+                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
+                            <div class="text-xs text-zinc-500 ">Meter description</div>
+                        </div>
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">06UH859026</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">06UH859026</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
-                            <div class="text-sm font-medium text-zinc-900">06UH859026</div>
-                            <div class="text-xs text-zinc-500">Meter description</div>
-                        </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">Caravan Plots Volume Total</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">PV Generated Total</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">Team Accommodation Volume Total</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">06UH859026</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
-                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer hover:border-zinc-300">
+                        <div class="meter-item p-3 rounded-xl bg-white border border-zinc-200 cursor-pointer">
                             <div class="text-sm font-medium text-zinc-900">06UH859026</div>
                             <div class="text-xs text-zinc-500">Meter description</div>
                         </div>
@@ -275,7 +275,7 @@
                             <i class="ph ph-caret-down text-xl"></i>
                         </div>
                     </div>
-                </div>
+                </div>  
 
                 <!-- Right Content - Chart Area -->
                 <div class="flex-1 p-6">
@@ -312,9 +312,15 @@
 
                     <!-- Stats -->
                     <div id="stats-section" class="mb-6">
-                        <div class="text-sm text-zinc-500 mb-1">Last 12 months</div>
-                        <div class="text-3xl font-bold text-zinc-900">11,264,142 <span class="text-lg font-medium">kWh</span></div>
-                        <div class="text-sm text-zinc-500 mt-1">vs 12,264,142 prev 12 months</div>
+                        <div id="summary-date" class="text-sm text-zinc-500">
+                            Last 12 months
+                        </div>
+                        <div class="text-3xl font-bold text-zinc-900">
+                            <span id="summary-kwh">11,264,142 </span> kWh
+                        </div>
+                        <div id="summary-compare" class="text-sm text-zinc-500 mt-1">
+                            vs 12,264,142 prev 12 months
+                        </div>
                     </div>
 
                     <!-- Chart -->
@@ -512,6 +518,41 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // =====================
+            // Utility Tab Activation by Hash (robust)
+            // =====================
+            function activateUtilityTabByHash() {
+                const hash = window.location.hash;
+                if (!hash) return;
+                    const tabs = document.querySelectorAll('.dashboard-tab');
+                    let targetUtility = null;
+                    if (hash === '#electricity') targetUtility = 'electricity';
+                    else if (hash === '#gas') targetUtility = 'gas';
+                    else if (hash === '#water') targetUtility = 'water';
+                    else if (hash === '#energy') targetUtility = 'energy';
+                    if (!targetUtility) return;
+                    // Try to activate immediately
+                    let found = false;
+                    tabs.forEach(tab => {
+                        if (tab.dataset.utility === targetUtility) {
+                            tab.click();
+                            found = true;
+                        }
+                    });
+                    // If not found, try again after a short delay (in case of slow DOM)
+                    if (!found) {
+                        setTimeout(() => {
+                            tabs.forEach(tab => {
+                                if (tab.dataset.utility === targetUtility) {
+                                    tab.click();
+                                }
+                            });
+                        }, 200);
+                    }
+                }
+            // Run after all listeners and chart init
+            setTimeout(activateUtilityTabByHash, 0);
+            window.addEventListener('hashchange', activateUtilityTabByHash);
             // Initialize Lucide icons
             lucide.createIcons();
             
@@ -604,15 +645,39 @@
 
             // Meter list selection
             const meterItems = document.querySelectorAll('.meter-item');
-            meterItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    meterItems.forEach(m => {
-                        m.classList.remove('active', 'border-2', 'border-zinc-900');
-                        m.classList.add('border', 'border-zinc-200');
+
+            function applyActive(item) {
+                meterItems.forEach(m => {
+                    m.classList.remove('bg-[#052e16]', 'border-[#052e16]');
+
+                    m.classList.add('bg-white', 'border', 'border-zinc-200');
+
+                    m.querySelectorAll('div').forEach(el => {
+                        el.classList.remove('text-white');
+                        el.classList.add(
+                            el.classList.contains('text-xs') ? 'text-zinc-500' : 'text-zinc-900'
+                        );
                     });
-                    item.classList.add('active', 'border-2', 'border-zinc-900');
-                    item.classList.remove('border', 'border-zinc-200');
                 });
+
+                item.classList.remove('bg-white', 'border', 'border-zinc-200');
+                item.classList.add('bg-[#052e16]', 'border-[#052e16]');
+
+                item.querySelectorAll('div').forEach(el => {
+                    el.classList.remove('text-zinc-900', 'text-zinc-500');
+                    el.classList.add('text-white');
+                });
+            }
+
+            // click behavior
+            meterItems.forEach(item => {
+                item.addEventListener('click', () => applyActive(item));
+            });
+
+            // set default active on load (FIRST ITEM OR .active)
+            window.addEventListener('DOMContentLoaded', () => {
+                const defaultActive = document.querySelector('.meter-item.active') || meterItems[0];
+                applyActive(defaultActive);
             });
 
             // Time period tabs
@@ -679,7 +744,7 @@
             // =====================
             // Report Chart
             // =====================
-            
+            let selectedBarIndex = null;
             const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
             // Vertical dashed grid plugin - dynamic based on data length
@@ -702,6 +767,30 @@
                         ctx.lineTo(x, chartArea.bottom);
                         ctx.stroke();
                     }
+                    ctx.restore();
+                }
+            };
+
+            const selectedBarLinePlugin = {
+                id: 'selectedBarLine',
+                afterDatasetsDraw(chart) {
+                    if (selectedBarIndex === null) return;
+
+                    const { ctx, chartArea } = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    const bar = meta.data[selectedBarIndex];
+
+                    if (!bar) return;
+
+                    const x = bar.x;
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#9CA3AF';
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(x, chartArea.top);
+                    ctx.lineTo(x, chartArea.bottom);
+                    ctx.stroke();
                     ctx.restore();
                 }
             };
@@ -747,6 +836,10 @@
             // Report chart data (in hundred thousands)
             const reportData = [105000, 110000, 105000, 100000, 105000, 125000, 120000, 115000, 110000, 75000, 70000, 65000];
             const reportNorm = [115000, 115000, 115000, 110000, 110000, 115000, 115000, 110000, 105000, 95000, 90000, 85000];
+            const previousYearData = [
+                98000, 102000, 99000, 97000, 100000, 110000,
+                108000, 105000, 101000, 70000, 68000, 64000
+            ];
             const reportColors = generateBarColors(reportData, reportNorm, '#34AC41', '#1D4E24');
 
             // Create report chart
@@ -759,11 +852,25 @@
                         data: reportData,
                         backgroundColor: reportColors,
                         borderRadius: 4,
-                        barThickness: 40,
-                        maxBarThickness: 40
+                        barThickness: 60,
                     }]
                 },
                 options: {
+                    onClick: (evt, elements) => {
+                        if (elements.length) {
+                            const index = elements[0].index;
+
+                            selectedBarIndex = index;
+                            handleBarClick(index);
+                            setSummaryActive(true);
+                        } else {
+                            selectedBarIndex = null;
+                            resetSummary();
+                            setSummaryActive(false);
+                        }
+
+                        reportChart.update();
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: false,
@@ -801,9 +908,40 @@
                         }
                     }
                 },
-                plugins: [verticalDashedGridPlugin, createNormLinePlugin(reportNorm)]
+                plugins: [
+                    verticalDashedGridPlugin,
+                    createNormLinePlugin(reportNorm),
+                    selectedBarLinePlugin
+                ]
             });
             
+            function handleBarClick(index) {
+                const currentValue = reportData[index];
+                const previousValue = previousYearData[index];
+                const month = MONTHS[index];
+
+                const format = (val) => val.toLocaleString();
+
+                // Update UI
+                document.getElementById('summary-date').textContent = `${month} 2025`;
+                document.getElementById('summary-kwh').textContent = format(currentValue);
+                document.getElementById('summary-compare').textContent =
+                    `vs ${format(previousValue)} last year`;
+            }
+
+            function setSummaryActive(active) {
+                const container = document.getElementById('summary-container');
+                if (!container) return;
+
+                container.style.backgroundColor = active ? '#F3F4F6' : 'transparent';
+            }
+
+            function resetSummary() {
+                document.getElementById('summary-date').textContent = 'Last 12 months';
+                document.getElementById('summary-kwh').textContent = '217,875';
+                document.getElementById('summary-compare').textContent =
+                    'vs 200,000 last year';
+            }
             // Function to update chart for different time periods
             function updateChartForPeriod(period) {
                 if (!reportChart) return;
@@ -815,25 +953,25 @@
                     labels = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
                     data = Array.from({ length: 24 }, () => Math.floor(Math.random() * 80000) + 20000);
                     norm = Array.from({ length: 24 }, () => Math.floor(Math.random() * 30000) + 50000);
-                    barWidth = 20;
+                    barWidth = 24;
                 } else if (period === 'Month') {
                     // 31 days max - bar width scaled from 40px base
                     labels = Array.from({ length: 31 }, (_, i) => `${i + 1}`);
                     data = Array.from({ length: 31 }, () => Math.floor(Math.random() * 60000) + 30000);
                     norm = Array.from({ length: 31 }, () => Math.floor(Math.random() * 20000) + 50000);
-                    barWidth = 15;
+                    barWidth = 20;
                 } else if (period === 'All time') {
                     // Show years - bar width wider for fewer bars
-                    labels = ['2020', '2021', '2022', '2023', '2024', '2025'];
-                    data = [98000, 105000, 112000, 108000, 115000, 110000];
-                    norm = [100000, 100000, 105000, 105000, 110000, 110000];
-                    barWidth = 70;
+                    labels = ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+                    data = [108000, 115000, 110000, 112000, 118000, 120000, 125000, 130000, 135000, 140000];
+                    norm = [105000, 110000, 110000, 115000, 120000, 125000, 130000, 135000, 140000, 145000];
+                    barWidth = 74;
                 } else {
                     // Year - 12 months, 40px width
                     labels = MONTHS;
                     data = reportData;
                     norm = reportNorm;
-                    barWidth = 40;
+                    barWidth = 60;
                 }
                 
                 const colors = generateBarColors(data, norm, '#34AC41', '#1D4E24');
